@@ -1,0 +1,10 @@
+.git/
+.vs/
+
+Binaries/
+
+Content/
+
+DerivedDataCache/
+Intermediate/
+Saved/
