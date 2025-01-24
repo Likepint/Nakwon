@@ -3,7 +3,7 @@
 #include "DrawDebugHelpers.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/PlayerController.h"
-#include "LSJ/CCharacter.h"
+#include "LSJ/Characters/CCharacter.h"
 
 CharacterDebuggerCategory::CharacterDebuggerCategory()
 {
