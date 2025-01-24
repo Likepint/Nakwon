@@ -1,5 +1,5 @@
 #include "CGameMode.h"
-#include "LSJ/CCharacter.h"
+#include "LSJ/Characters/CCharacter.h"
 
 ACGameMode::ACGameMode()
 {
