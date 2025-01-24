@@ -27,7 +27,7 @@ void ACZombie::Tick(float DeltaTime)
 void ACZombie::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	
 }
 
 void ACZombie::Initialize()
