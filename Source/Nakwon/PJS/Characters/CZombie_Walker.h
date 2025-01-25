@@ -4,9 +4,11 @@
 #include "PJS/Characters/CZombie.h"
 #include "CZombie_Walker.generated.h"
 
-UCLASS()
+UCLASS(Blueprintable)
 class NAKWON_API ACZombie_Walker : public ACZombie
 {
 	GENERATED_BODY()
 	
+public:
+	ACZombie_Walker();
 };
