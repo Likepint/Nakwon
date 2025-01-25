@@ -4,7 +4,7 @@
 #include "GameFramework/Character.h"
 #include "CZombie.generated.h"
 
-UCLASS()
+UCLASS(NotBlueprintable)
 class NAKWON_API ACZombie : public ACharacter
 {
 	GENERATED_BODY()
@@ -27,5 +27,17 @@ public:
 private:
 	void Initialize();
 
+	void SetAnimInst();
+
 	void SetComponents();
+
+public:
+	TArray<TSubclassOf<class UCAnimInstance_Zombie>> GetAnimInstances() { return animInstances; }
+
+	bool GetGender() { return Gender; }
+
+private:
+	TArray<TSubclassOf<class UCAnimInstance_Zombie>> animInstances;
+
+	bool Gender = FMath::RandBool();
 };

@@ -1,5 +1,8 @@
 #include "PJS/Characters/CCharacterAsset.h"
+#include "Global.h"
 #include "GameFramework/Character.h"
+#include "PJS/Characters/CZombie.h"
+#include "PJS/Characters/CAnimInstance_Zombie.h"
 #include "Components/SkeletalMeshComponent.h"
 
 UCCharacterAsset::UCCharacterAsset()
@@ -9,29 +12,33 @@ UCCharacterAsset::UCCharacterAsset()
 
 void UCCharacterAsset::BeginPlay(ACharacter* InOwner)
 {
-	int32 gender = FMath::RandRange(0, 1);
-
-	USkeletalMesh* mesh = SkeletalMesh[gender];
-	InOwner->GetMesh()->SetSkeletalMesh(mesh);
-
-	switch (gender)
+	if (ACZombie* character = Cast<ACZombie>(InOwner))
 	{
-		case 0: // Man
+		USkeletalMesh* mesh = SkeletalMesh[character->GetGender()];
+		character->GetMesh()->SetSkeletalMesh(mesh);
+
+		character->GetMesh()->SetAnimClass(character->GetAnimInstances()[character->GetGender()]);
+
+		switch (character->GetGender())
 		{
-			InOwner->GetMesh()->SetMaterial(0, Cloth_M[FMath::RandRange(0, 7)]);
-			InOwner->GetMesh()->SetMaterial(1, UpperBody_M[FMath::RandRange(0, 7)]);
-			InOwner->GetMesh()->SetMaterial(2, LowerBody_M[FMath::RandRange(0, 9)]);
+			case 0: // Man
+			{
 
-			break;
-		}
+				character->GetMesh()->SetMaterial(0, Cloth_M[FMath::RandRange(0, Cloth_M.Num() - 1)]);
+				character->GetMesh()->SetMaterial(1, UpperBody_M[FMath::RandRange(0, UpperBody_M.Num() - 1)]);
+				character->GetMesh()->SetMaterial(2, LowerBody_M[FMath::RandRange(0, LowerBody_M.Num() - 1)]);
 
-		case 1: // Woman
-		{
-			InOwner->GetMesh()->SetMaterial(0, LowerBody_W[FMath::RandRange(0, 7)]);
-			InOwner->GetMesh()->SetMaterial(1, UpperBody_W[FMath::RandRange(0, 7)]);
-			InOwner->GetMesh()->SetMaterial(2, Cloth_W[FMath::RandRange(0, 7)]);
+				break;
+			}
 
-			break;
+			case 1: // Woman
+			{
+				character->GetMesh()->SetMaterial(0, LowerBody_W[FMath::RandRange(0, LowerBody_W.Num() - 1)]);
+				character->GetMesh()->SetMaterial(1, UpperBody_W[FMath::RandRange(0, UpperBody_W.Num() - 1)]);
+				character->GetMesh()->SetMaterial(2, Cloth_W[FMath::RandRange(0, Cloth_W.Num() - 1)]);
+
+				break;
+			}
 		}
 	}
 }

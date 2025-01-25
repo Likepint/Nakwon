@@ -6,6 +6,9 @@ UCRandSetComponent::UCRandSetComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
+	ConstructorHelpers::FObjectFinder<UCCharacterAsset> asset(L"/Script/Nakwon.CCharacterAsset'/Game/PJS/Characters/DA_CCharacterAsset.DA_CCharacterAsset'");
+	if (asset.Succeeded())
+		DataAsset = asset.Object;
 }
 
 void UCRandSetComponent::BeginPlay()
