@@ -13,6 +13,18 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
 	float Speed;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+	int32 DefaultIDX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+	int32 WalkIDX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+	int32 RunIDX;
+
+public:
+	virtual void NativeInitializeAnimation() override;
+
 public:
 	void NativeBeginPlay() override;
 	void NativeUpdateAnimation(float DeltaSeconds) override;
