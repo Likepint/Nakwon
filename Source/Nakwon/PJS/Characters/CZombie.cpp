@@ -20,11 +20,21 @@ void ACZombie::BeginPlay()
 {
 	Super::BeginPlay();
 
+	GetCharacterMovement()->MaxWalkSpeed = 50;
 }
 
 void ACZombie::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (ACharacter* player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))
+	{
+		FRotator rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), player->GetActorLocation());
+		SetActorRotation(FQuat(FRotator(0, rotator.Yaw, 0)));
+
+		FVector dir = player->GetActorLocation() - GetActorLocation();
+		AddMovementInput(dir.GetSafeNormal(), GetCharacterMovement()->MaxWalkSpeed * DeltaTime);
+	}
 
 }
 
