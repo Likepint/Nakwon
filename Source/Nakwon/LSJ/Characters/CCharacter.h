@@ -20,6 +20,9 @@ private:
 	UPROPERTY(VisibleAnywhere, category="Component")
 	class UCMovementComponent* Movement;
 
+	UPROPERTY(VisibleAnywhere, category = "Component")
+	class UCWeaponComponent* Weapon;
+
 private:
 	UPROPERTY(VisibleAnywhere, category="Input")
 	class UInputMappingContext* IMC_Default;
@@ -29,6 +32,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, category="Input")
 	class UInputAction* IA_Look;
+
+	UPROPERTY(VisibleAnywhere, category="Input")
+	class UInputAction* IA_Run;
 
 public:
 	ACCharacter();
