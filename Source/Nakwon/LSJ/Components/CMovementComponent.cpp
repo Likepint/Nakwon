@@ -36,8 +36,7 @@ void UCMovementComponent::OnMovement(const FInputActionValue& InVal)
 void UCMovementComponent::OnLook(const FInputActionValue& InVal)
 {
 	// Horizontal
-	Owner->AddControllerYawInput(InVal.Get<FVector2D>().X * 0.5);
-
+	Owner->AddControllerYawInput(InVal.Get<FVector2D>().X * .5);
 	// Vertical
 	Owner->AddControllerPitchInput(InVal.Get<FVector2D>().Y * 0.5);
 }
