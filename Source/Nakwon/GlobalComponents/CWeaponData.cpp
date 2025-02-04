@@ -1,0 +1,2 @@
+#include "GlobalComponents/CWeaponData.h"
+
