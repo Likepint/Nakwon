@@ -16,6 +16,9 @@ public:
 	void OnMovement(const struct FInputActionValue& InVal);
 	void OnLook(const struct FInputActionValue& InVal);
 
+	void OnRun(const struct FInputActionValue& InVal);
+	void OffRun(const struct FInputActionValue& InVal);
+
 protected:
 	virtual void BeginPlay() override;
 

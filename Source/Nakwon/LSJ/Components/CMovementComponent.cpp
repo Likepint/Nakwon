@@ -14,6 +14,8 @@ void UCMovementComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Owner = Cast<ACharacter>(GetOwner());
+
+	Owner->GetCharacterMovement()->MaxWalkSpeed = 100.0f;
 }
 
 void UCMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -34,8 +36,17 @@ void UCMovementComponent::OnMovement(const FInputActionValue& InVal)
 void UCMovementComponent::OnLook(const FInputActionValue& InVal)
 {
 	// Horizontal
-	Owner->AddControllerYawInput(InVal.Get<FVector2D>().X * 0.5);
-
+	Owner->AddControllerYawInput(InVal.Get<FVector2D>().X * .5);
 	// Vertical
 	Owner->AddControllerPitchInput(InVal.Get<FVector2D>().Y * 0.5);
+}
+
+void UCMovementComponent::OnRun(const FInputActionValue& InVal)
+{
+	Owner->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+}
+
+void UCMovementComponent::OffRun(const FInputActionValue& InVal)
+{
+	Owner->GetCharacterMovement()->MaxWalkSpeed = 100.0f;
 }
