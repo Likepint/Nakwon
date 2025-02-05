@@ -20,6 +20,9 @@ private:
 	UPROPERTY(VisibleAnywhere, category="Component")
 	class UCMovementComponent* Movement;
 
+	UPROPERTY(VisibleAnywhere, category="Component")
+	class UCStateComponent* State;
+
 	UPROPERTY(VisibleAnywhere, category = "Component")
 	class UCWeaponComponent* Weapon;
 

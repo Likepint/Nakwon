@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "GlobalComponents/CWeaponStructures.h"
 #include "CWeaponAsset.generated.h"
 
 UCLASS()
@@ -12,6 +13,9 @@ class NAKWON_API UCWeaponAsset : public UDataAsset
 private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class ACAttachment> AttachmentClass;
+
+	UPROPERTY(EditAnywhere)
+	FEquipmentData EquipmentData;
 	
 public:
 	UCWeaponAsset();
