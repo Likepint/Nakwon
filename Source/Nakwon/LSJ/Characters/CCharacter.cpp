@@ -10,6 +10,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "LSJ/Components/CMovementComponent.h"
+#include "GlobalComponents/CStateComponent.h"
 #include "GlobalComponents/CWeaponComponent.h"
 
 
@@ -25,6 +26,7 @@ ACCharacter::ACCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	Camera->SetupAttachment(SpringArm);
+
 	
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	GetMesh()->SetRelativeRotation(FQuat(FRotator(0.0f, -90.0f, 0.0f))); // quaternion
@@ -52,6 +54,9 @@ ACCharacter::ACCharacter()
 
 	// CMovementComponent로부터 컴포넌트 생성
 	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
+
+	// CStateComponent 생성
+	State = CreateDefaultSubobject<UCStateComponent>("State");
 
 	// CWeaponComponent로부터 컴포넌트 생성
 	Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
