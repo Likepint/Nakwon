@@ -16,7 +16,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* Camera;
 
-private:
+public:
 	UPROPERTY(VisibleAnywhere, category="Component")
 	class UCMovementComponent* Movement;
 
@@ -39,6 +39,12 @@ private:
 	UPROPERTY(VisibleAnywhere, category="Input")
 	class UInputAction* IA_Run;
 
+	UPROPERTY(VisibleAnywhere, category="Input")
+	class UInputAction* IA_Bat;
+
+	UPROPERTY(VisibleAnywhere, Category=Input)
+	class UInputAction* IA_Attack;
+
 public:
 	ACCharacter();
 
@@ -50,6 +56,4 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-public:
 };

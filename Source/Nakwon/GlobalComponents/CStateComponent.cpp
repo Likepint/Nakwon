@@ -18,6 +18,9 @@ void UCStateComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	FString str = UEnum::GetValueAsName(Type).ToString();
+
+	GEngine->AddOnScreenDebugMessage(0, 1, FColor::Cyan, *str);
 }
 
 void UCStateComponent::ChangeType(EStateType InNewType)

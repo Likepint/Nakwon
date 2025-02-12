@@ -1,0 +1,16 @@
+#include "CoreMinimal.h"
+#include "Animation/AnimNotifies/AnimNotifyState.h"
+#include "CAnimNotifyState_Equip.generated.h"
+
+UCLASS()
+class NAKWON_API UCAnimNotifyState_Equip : public UAnimNotifyState
+{
+	GENERATED_BODY()
+	
+public:
+	FString GetNotifyName() const;
+
+
+	virtual void NotifyBegin(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, float TotalDuration) override;
+	virtual void NotifyEnd(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation) override;
+};

@@ -22,7 +22,7 @@ void UCAnimInstance_Zombie::NativeBeginPlay()
 		Owner = Cast<ACZombie>(character);
 		NullCheck(Owner);
 	}
-
+	
 }
 
 void UCAnimInstance_Zombie::NativeUpdateAnimation(float DeltaSeconds)

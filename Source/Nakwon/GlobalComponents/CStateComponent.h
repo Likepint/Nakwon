@@ -32,7 +32,7 @@ public:
 	FORCEINLINE bool IsHittedMode() { return Type == EStateType::Hitted; }
 	FORCEINLINE bool IsDeadMode() {	return Type == EStateType::Dead; }
 
-private:
+public:
 	void ChangeType(EStateType InNewType);
 
 	void SetIdleMode();

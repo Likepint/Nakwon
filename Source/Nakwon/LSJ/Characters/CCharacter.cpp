@@ -26,7 +26,6 @@ ACCharacter::ACCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	Camera->SetupAttachment(SpringArm);
-
 	
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	GetMesh()->SetRelativeRotation(FQuat(FRotator(0.0f, -90.0f, 0.0f))); // quaternion
@@ -52,13 +51,23 @@ ACCharacter::ACCharacter()
 		IA_Run = IA_RUN.Object;
 	}
 
-	// CMovementComponent로부터 컴포넌트 생성
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_BAT(TEXT("/Script/EnhancedInput.InputAction'/Game/LSJ/Inputs/IA_Bat.IA_Bat'"));
+	if (IA_BAT.Succeeded()) {
+		IA_Bat= IA_BAT.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_ATTACK(TEXT("/Script/EnhancedInput.InputAction'/Game/LSJ/Inputs/IA_Attack.IA_Attack'"));
+	if (IA_ATTACK.Succeeded()) {
+		IA_Attack = IA_ATTACK.Object;
+	}
+
+	// CMovementComponent
 	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
 
-	// CStateComponent 생성
+	// CStateComponent
 	State = CreateDefaultSubobject<UCStateComponent>("State");
 
-	// CWeaponComponent로부터 컴포넌트 생성
+	// CWeaponComponent
 	Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
 }
 
@@ -91,5 +100,9 @@ void ACCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(IA_Run, ETriggerEvent::Triggered, Movement, &UCMovementComponent::OnRun);
 		EnhancedInputComponent->BindAction(IA_Run, ETriggerEvent::Completed, Movement, &UCMovementComponent::OffRun);
+
+		EnhancedInputComponent->BindAction(IA_Bat, ETriggerEvent::Started, Weapon, &UCWeaponComponent::SetBatMode);
+
+		EnhancedInputComponent->BindAction(IA_Attack, ETriggerEvent::Started, Weapon, &UCWeaponComponent::DoAction);
 	}
-}
+};
