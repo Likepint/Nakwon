@@ -10,9 +10,8 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "LSJ/Components/CMovementComponent.h"
-#include "GlobalComponents/CStateComponent.h"
-#include "GlobalComponents/CWeaponComponent.h"
-
+#include "Components/CStateComponent.h"
+#include "Components/CWeaponComponent.h"
 
 ACCharacter::ACCharacter()
 {
@@ -26,7 +25,6 @@ ACCharacter::ACCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	Camera->SetupAttachment(SpringArm);
-
 	
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	GetMesh()->SetRelativeRotation(FQuat(FRotator(0.0f, -90.0f, 0.0f))); // quaternion
@@ -51,6 +49,11 @@ ACCharacter::ACCharacter()
 	if (IA_RUN.Succeeded()) {
 		IA_Run = IA_RUN.Object;
 	}
+
+	//static ConstructorHelpers::FObjectFinder<UInputAction> IA_RUN(TEXT("/Script/EnhancedInput.InputAction'/Game/LSJ/Inputs/IA_Run.IA_Run'"));
+	//if (IA_RUN.Succeeded()) {
+	//	IA_Run = IA_RUN.Object;
+	//}
 
 	// CMovementComponent로부터 컴포넌트 생성
 	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
@@ -91,5 +94,7 @@ void ACCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(IA_Run, ETriggerEvent::Triggered, Movement, &UCMovementComponent::OnRun);
 		EnhancedInputComponent->BindAction(IA_Run, ETriggerEvent::Completed, Movement, &UCMovementComponent::OffRun);
+
+		EnhancedInputComponent->BindAction(IA_Attack, ETriggerEvent::Started, Weapon, &UCWeaponComponent::DoAction);
 	}
 }
