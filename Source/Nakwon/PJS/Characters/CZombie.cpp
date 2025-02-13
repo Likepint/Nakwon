@@ -4,9 +4,8 @@
 #include "PJS/Characters/CAnimInstance_Zombie.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PJS/Components/CRandSetComponent.h"
-#include "PJS/Components/CZStateComponent.h"
 #include "PJS/Components/CZMovementComponent.h"
-#include "PJS/Weapons/CZWeaponStructures.h"
+//#include "PJS/Components/CZMontageComponent.h"
 
 ACZombie::ACZombie()
 {
@@ -17,6 +16,7 @@ ACZombie::ACZombie()
 	SetAnimInst();
 
 	SetComponents();
+
 }
 
 void ACZombie::BeginPlay()
@@ -25,21 +25,11 @@ void ACZombie::BeginPlay()
 
 	GetCharacterMovement()->MaxWalkSpeed = 50;
 
-	State->OnStateTypeChanged.AddDynamic(this, &ACZombie::OnStateTypeChanged);
 }
 
 void ACZombie::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (ACharacter* player = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))
-	{
-		FRotator rotator = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), player->GetActorLocation());
-		SetActorRotation(FQuat(FRotator(0, rotator.Yaw, 0)));
-
-		FVector dir = player->GetActorLocation() - GetActorLocation();
-		AddMovementInput(dir.GetSafeNormal(), GetCharacterMovement()->MaxWalkSpeed * DeltaTime);
-	}
 
 }
 
@@ -59,19 +49,14 @@ void ACZombie::Initialize()
 
 void ACZombie::SetAnimInst()
 {
-	ConstructorHelpers::FClassFinder<UCAnimInstance_Zombie> MAnim(L"/Script/Engine.AnimBlueprint'/Game/PJS/ABP_CAnimInstance_Zombie_M.ABP_CAnimInstance_Zombie_M_C'");
-	animInstances.Add(MAnim.Class);
-
-	ConstructorHelpers::FClassFinder<UCAnimInstance_Zombie> WAnim(L"/Script/Engine.AnimBlueprint'/Game/PJS/ABP_CAnimInstance_Zombie_W.ABP_CAnimInstance_Zombie_W_C'");
-	animInstances.Add(WAnim.Class);
+	ConstructorHelpers::FClassFinder<UCAnimInstance_Zombie> Anim(L"/Script/Engine.AnimBlueprint'/Game/PJS/BP_CAnimInstance_Zombie.BP_CAnimInstance_Zombie_C'");
+	if (Anim.Succeeded())
+		GetMesh()->SetAnimInstanceClass(Anim.Class);
 }
 
 void ACZombie::SetComponents()
 {
 	RandSet = CreateDefaultSubobject<UCRandSetComponent>("RandSetComponent");
-
-	CHelpers::CreateActorComponent<UCZMovementComponent>(this, &Movement, "Movement");
-	CHelpers::CreateActorComponent<UCZStateComponent>(this, &State, "State");
 
 }
 
@@ -79,24 +64,24 @@ float ACZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, 
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	Damage.Power = damage;
-	Damage.Character = Cast<ACharacter>(EventInstigator->GetPawn());
-	Damage.Causer = DamageCauser;
-	Damage.Event = (FZActionDamageEvent*)&DamageEvent;
+	//Damage.Power = damage;
+	//Damage.Character = Cast<ACharacter>(EventInstigator->GetPawn());
+	//Damage.Causer = DamageCauser;
+	//Damage.Event = (FZActionDamageEvent*)&DamageEvent;
 
-	State->SetHittedMode();
+	//State->SetHittedMode();
 
 	return damage;
 }
 
-void ACZombie::OnStateTypeChanged(EState InPrevType, EState InNewType)
-{
-	switch (InNewType)
-	{
-		case EState::Hitted: Hitted(); break;
-		case EState::Dead: Dead(); break;
-	}
-}
+//void ACZombie::OnStateTypeChanged(EZState InPrevType, EZState InNewType)
+//{
+//	/*switch (InNewType)
+//	{
+//		case EZState::dama: Hitted(); break;
+//		case EZState::Dead: Dead(); break;
+//	}*/
+//}
 
 void ACZombie::Hitted()
 {
@@ -106,7 +91,7 @@ void ACZombie::Hitted()
 	//	Damage.Power = 0;
 	//}
 
-	//Change Color
+	////Change Color
 	//{
 	//	Change_Color(this, FLinearColor::Red);
 
@@ -125,16 +110,16 @@ void ACZombie::Hitted()
 	//	data->PlaySoundWave(this);
 	//	data->PlayEffect(GetWorld(), GetActorLocation(), GetActorRotation());
 
-	//	//if (Status->IsDead() == false)
-	//	//{
-	//	//	FVector start = GetActorLocation();
-	//	//	FVector target = Damage.Character->GetActorLocation();
-	//	//	FVector direction = target - start;
-	//	//	direction.Normalize();
+	//	if (Status->IsDead() == false)
+	//	{
+	//		FVector start = GetActorLocation();
+	//		FVector target = Damage.Character->GetActorLocation();
+	//		FVector direction = target - start;
+	//		direction.Normalize();
 
-	//	//	LaunchCharacter(-direction * data->Launch, false, false);
-	//	//	SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
-	//	//}
+	//		LaunchCharacter(-direction * data->Launch, false, false);
+	//		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+	//	}
 	//}
 
 	//if (Status->IsDead())
@@ -144,14 +129,24 @@ void ACZombie::Hitted()
 	//	return;
 	//}
 
-	Damage.Character = nullptr;
-	Damage.Causer = nullptr;
-	Damage.Event = nullptr;
+	//Damage.Character = nullptr;
+	//Damage.Causer = nullptr;
+	//Damage.Event = nullptr;
+}
+
+void ACZombie::End_Damaged()
+{
+	//State->SetIdleMode();
 }
 
 void ACZombie::Dead()
 {
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	//Montages->PlayDeadMode();
+	//Montage->PlayDeadMode();
+}
+
+void ACZombie::End_Dead()
+{
+
 }

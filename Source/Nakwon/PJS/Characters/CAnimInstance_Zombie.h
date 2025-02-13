@@ -10,17 +10,8 @@ class NAKWON_API UCAnimInstance_Zombie : public UAnimInstance
 	GENERATED_BODY()
 	
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Animation")
 	float Speed;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-	int32 DefaultIDX;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-	int32 WalkIDX;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
-	int32 RunIDX;
 
 public:
 	virtual void NativeInitializeAnimation() override;
@@ -31,5 +22,12 @@ public:
 
 private:
 	class ACZombie* Owner;
+	
+protected:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "State")
+	int32 Index;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "State")
+	bool bSleep = true;
 
 };

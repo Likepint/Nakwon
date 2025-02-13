@@ -17,13 +17,10 @@ void UCCharacterAsset::BeginPlay(ACharacter* InOwner)
 		USkeletalMesh* mesh = SkeletalMesh[character->GetGender()];
 		character->GetMesh()->SetSkeletalMesh(mesh);
 
-		character->GetMesh()->SetAnimClass(character->GetAnimInstances()[character->GetGender()]);
-
 		switch (character->GetGender())
 		{
 			case 0: // Man
 			{
-
 				character->GetMesh()->SetMaterial(0, Cloth_M[FMath::RandRange(0, Cloth_M.Num() - 1)]);
 				character->GetMesh()->SetMaterial(1, UpperBody_M[FMath::RandRange(0, UpperBody_M.Num() - 1)]);
 				character->GetMesh()->SetMaterial(2, LowerBody_M[FMath::RandRange(0, LowerBody_M.Num() - 1)]);
