@@ -13,9 +13,9 @@ void UCMovementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Owner = Cast<ACharacter>(GetOwner());
+	OwnerCharacter = Cast<ACharacter>(GetOwner());
 
-	Owner->GetCharacterMovement()->MaxWalkSpeed = 100.0f;
+	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 100.0f;
 }
 
 void UCMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -26,27 +26,52 @@ void UCMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UCMovementComponent::OnMovement(const FInputActionValue& InVal)
 {
+	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
+	//rotator에는 전방방향 구하는 함수가 없어서 Quat으로 변경함
+
 	// Forward
-	Owner->AddMovementInput(Owner->GetActorForwardVector(), InVal.Get<FVector2D>().X);
+	OwnerCharacter->AddMovementInput(FQuat(rotator).GetForwardVector(), InVal.Get<FVector2D>().X);
 
 	// Right
-	Owner->AddMovementInput(Owner->GetActorRightVector(), InVal.Get<FVector2D>().Y);
+	OwnerCharacter->AddMovementInput(FQuat(rotator).GetRightVector(), InVal.Get<FVector2D>().Y);
 }
 
 void UCMovementComponent::OnLook(const FInputActionValue& InVal)
 {
 	// Horizontal
-	Owner->AddControllerYawInput(InVal.Get<FVector2D>().X * .5);
+	OwnerCharacter->AddControllerYawInput(InVal.Get<FVector2D>().X * .5);
 	// Vertical
-	Owner->AddControllerPitchInput(InVal.Get<FVector2D>().Y * 0.5);
+	OwnerCharacter->AddControllerPitchInput(InVal.Get<FVector2D>().Y * 0.5);
 }
 
 void UCMovementComponent::OnRun(const FInputActionValue& InVal)
 {
-	Owner->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 }
 
 void UCMovementComponent::OffRun(const FInputActionValue& InVal)
 {
-	Owner->GetCharacterMovement()->MaxWalkSpeed = 100.0f;
+	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 100.0f;
+}
+
+void UCMovementComponent::EnableControlRotation()
+{
+	OwnerCharacter->bUseControllerRotationYaw = true;
+	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
+}
+
+void UCMovementComponent::DisableControlRotation()
+{
+	OwnerCharacter->bUseControllerRotationYaw = false;
+	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+}
+
+void UCMovementComponent::Move()
+{
+	bCanMove = true;
+}
+
+void UCMovementComponent::Stop()
+{
+	bCanMove = false;
 }
