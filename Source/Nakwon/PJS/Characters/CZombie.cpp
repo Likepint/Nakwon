@@ -4,7 +4,9 @@
 #include "PJS/Characters/CAnimInstance_Zombie.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PJS/Components/CRandSetComponent.h"
+#include "Components/CStateComponent.h"
 #include "PJS/Components/CZMovementComponent.h"
+#include "Components/CWeaponComponent.h"
 //#include "PJS/Components/CZMontageComponent.h"
 
 ACZombie::ACZombie()
@@ -56,7 +58,11 @@ void ACZombie::SetAnimInst()
 
 void ACZombie::SetComponents()
 {
-	RandSet = CreateDefaultSubobject<UCRandSetComponent>("RandSetComponent");
+	RandSet = CreateDefaultSubobject<UCRandSetComponent>("RandSet");
+
+	State = CreateDefaultSubobject<UCStateComponent>("State");
+	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
+	Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
 
 }
 

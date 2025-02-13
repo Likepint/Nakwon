@@ -18,6 +18,15 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Component")
 	class UCRandSetComponent* RandSet;
 
+	UPROPERTY(VisibleAnywhere, Category = "Component")
+	class UCStateComponent* State;
+
+	UPROPERTY(VisibleAnywhere, Category = "Component")
+	class UCMovementComponent* Movement;
+
+	UPROPERTY(VisibleAnywhere, Category = "Component")
+	class UCWeaponComponent* Weapon;
+
 public:
 	ACZombie();
 
