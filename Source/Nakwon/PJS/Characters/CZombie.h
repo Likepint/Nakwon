@@ -2,13 +2,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
-#include "PJS/Components/CZStateComponent.h"
+#include "PJS/Characters/IZombie.h"
 #include "GenericTeamAgentInterface.h"
 #include "CZombie.generated.h"
 
-UCLASS(NotBlueprintable)
+UCLASS()
 class NAKWON_API ACZombie
 	: public ACharacter
+	, public IIZombie
 	, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
@@ -16,20 +17,6 @@ class NAKWON_API ACZombie
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Component")
 	class UCRandSetComponent* RandSet;
-
-protected:
-	//UPROPERTY(VisibleAnywhere)
-	//class UCZMontagesComponent* Montages;
-
-	UPROPERTY(VisibleAnywhere)
-	class UCZMovementComponent* Movement;
-
-	UPROPERTY(VisibleAnywhere)
-	class UCZStateComponent* State;
-
-	//UPROPERTY(VisibleAnywhere)
-	//class UCZStatusComponent* Status;
-
 
 public:
 	ACZombie();
@@ -52,22 +39,21 @@ private:
 public:
 	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
-private:
-	UFUNCTION()
-	void OnStateTypeChanged(EState InPrevType, EState InNewType);
+//private:
+//	UFUNCTION()
+//	void OnStateTypeChanged(EZState InPrevType, EZState InNewType);
 
 protected:
 	virtual void Hitted();
 
-//public:
-//	virtual void End_Hitted() override;
-
-//private:
-//	UFUNCTION()
-//	void RestoreColor();
+public:
+	virtual void End_Damaged() override;
 
 private:
 	void Dead();
+
+public:
+	void End_Dead() override;
 
 //public:
 //	void End_Dead() override;
@@ -90,8 +76,12 @@ public:
 
 	bool GetGender() { return Gender; }
 
+	int32 GetIndex() { return Index; }
+
 private:
 	TArray<TSubclassOf<class UCAnimInstance_Zombie>> animInstances;
 
 	bool Gender = FMath::RandBool();
+
+	int32 Index = FMath::RandRange(0, 2);
 };

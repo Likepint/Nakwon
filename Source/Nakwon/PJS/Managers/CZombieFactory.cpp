@@ -2,7 +2,6 @@
 #include "Global.h"
 #include "Components/BoxComponent.h"
 #include "PJS/Characters/CZombie.h"
-#include "PJS/Characters/CZombie_Walker.h"
 
 ACZombieFactory::ACZombieFactory()
 {
@@ -37,6 +36,6 @@ void ACZombieFactory::MakeZombie()
 		FTransform transform;
 		transform.SetLocation(UKismetMathLibrary::RandomPointInBoundingBox(SpawnExtent->GetComponentLocation(), SpawnExtent->GetScaledBoxExtent()));
 
-		ACZombie_Walker* zombie = GetWorld()->SpawnActor<ACZombie_Walker>(ZombieFactory, transform);
+		ACZombie* zombie = GetWorld()->SpawnActor<ACZombie>(ZombieFactory, transform);
 	}
 }

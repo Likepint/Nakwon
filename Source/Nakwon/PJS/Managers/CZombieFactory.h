@@ -18,7 +18,7 @@ private:
 
 protected:
 	UPROPERTY(EditAnywhere, Category = "Zombies")
-	TSubclassOf<class ACZombie_Walker> ZombieFactory;
+	TSubclassOf<class ACZombie> ZombieFactory;
 	
 public:	
 	ACZombieFactory();

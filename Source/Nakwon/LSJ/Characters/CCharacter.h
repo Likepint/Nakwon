@@ -39,6 +39,9 @@ private:
 	UPROPERTY(VisibleAnywhere, category="Input")
 	class UInputAction* IA_Run;
 
+	UPROPERTY(VisibleAnywhere, category="Input")
+	class UInputAction* IA_Attack;
+
 public:
 	ACCharacter();
 
