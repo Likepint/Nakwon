@@ -19,15 +19,17 @@ ACCharacter::ACCharacter()
 
 	// GetCharacterMovement()->MaxWalkSpeed
 
+	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
+	GetMesh()->SetRelativeRotation(FQuat(FRotator(0.0f, -90.0f, 0.0f))); // quaternion
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
 	SpringArm->SetupAttachment(RootComponent);
 	SpringArm->bUsePawnControlRotation = true;
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	Camera->SetupAttachment(SpringArm);
-	
-	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
-	GetMesh()->SetRelativeRotation(FQuat(FRotator(0.0f, -90.0f, 0.0f))); // quaternion
+
+	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 
 	// 캐릭터 생성자에 IA랑 IMC 생성
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMC_DEFAULT(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/LSJ/Inputs/IMC_Default.IMC_Default'"));
@@ -50,10 +52,15 @@ ACCharacter::ACCharacter()
 		IA_Run = IA_RUN.Object;
 	}
 
-	//static ConstructorHelpers::FObjectFinder<UInputAction> IA_RUN(TEXT("/Script/EnhancedInput.InputAction'/Game/LSJ/Inputs/IA_Run.IA_Run'"));
-	//if (IA_RUN.Succeeded()) {
-	//	IA_Run = IA_RUN.Object;
-	//}
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_BAT(TEXT("/Script/EnhancedInput.InputAction'/Game/LSJ/Inputs/IA_Bat.IA_Bat'"));
+	if (IA_BAT.Succeeded()) {
+		IA_Bat = IA_BAT.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_ATTACK(TEXT("/Script/EnhancedInput.InputAction'/Game/LSJ/Inputs/IA_Attack.IA_Attack'"));
+	if (IA_ATTACK.Succeeded()) {
+		IA_Attack = IA_ATTACK.Object;
+	}
 
 	// CMovementComponent로부터 컴포넌트 생성
 	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
@@ -76,6 +83,8 @@ void ACCharacter::BeginPlay()
 			Subsystem->AddMappingContext(IMC_Default, 0);
 		}
 	}
+
+	Movement->DisableControlRotation();
 }
 
 void ACCharacter::Tick(float DeltaTime)
@@ -94,6 +103,8 @@ void ACCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(IA_Run, ETriggerEvent::Triggered, Movement, &UCMovementComponent::OnRun);
 		EnhancedInputComponent->BindAction(IA_Run, ETriggerEvent::Completed, Movement, &UCMovementComponent::OffRun);
+
+		EnhancedInputComponent->BindAction(IA_Bat, ETriggerEvent::Started, Weapon, &UCWeaponComponent::SetBatMode);
 
 		EnhancedInputComponent->BindAction(IA_Attack, ETriggerEvent::Started, Weapon, &UCWeaponComponent::DoAction);
 	}
