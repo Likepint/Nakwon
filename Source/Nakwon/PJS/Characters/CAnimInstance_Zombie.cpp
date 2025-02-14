@@ -2,7 +2,7 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "PJS/Characters/CZombie.h"
-//#include "PJS/Components/CZStateComponent.h"
+#include "Components/CStateComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 void UCAnimInstance_Zombie::NativeInitializeAnimation()
@@ -31,5 +31,5 @@ void UCAnimInstance_Zombie::NativeUpdateAnimation(float DeltaSeconds)
 
 	Speed = Owner->GetVelocity().Size2D();
 	
-	//bSleep = CHelpers::GetComponent<UCZStateComponent>(Owner)->IsSleep();
+	bSleep = CHelpers::GetComponent<UCStateComponent>(Owner)->IsSleepMode();
 }

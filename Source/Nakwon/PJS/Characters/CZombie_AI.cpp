@@ -1,6 +1,8 @@
 #include "PJS/Characters/CZombie_AI.h"
 #include "Global.h"
-//#include "PJS/Components/CZWeaponComponent.h"
+#include "Components/CStateComponent.h"
+#include "PJS/Components/CZMovementComponent.h"
+#include "Components/CWeaponComponent.h"
 #include "PJS/Components/CZAIBehaviorComponent.h"
 //#include "Components/WidgetComponent.h"
 //#include "PJS/Components/CZStatusComponent.h"
@@ -8,9 +10,15 @@
 
 ACZombie_AI::ACZombie_AI()
 {
+	State = CreateDefaultSubobject<UCStateComponent>("State");
+	Movement = CreateDefaultSubobject<UCZMovementComponent>("Movement");
+	Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
+
+	State->SetSleepMode();
+
 	//CHelpers::CreateComponent<UWidgetComponent>(this, &LabelWidget, "Label", GetMesh());
 
-	//CHelpers::CreateActorComponent<UCZWeaponComponent>(this, &Weapon, "Weapon");
+	//CHelpers::CreateActorComponent<UCWeaponComponent>(this, &Weapon, "Weapon");
 	//CHelpers::CreateActorComponent<UCZAIBehaviorComponent>(this, &Behavior, "Behavior");
 
 	//TSubclassOf<UCUserWidget_Label> labelClass;
@@ -25,12 +33,23 @@ void ACZombie_AI::BeginPlay()
 {
 	Super::BeginPlay();
 
+	Target = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
 }
 
 void ACZombie_AI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!State->IsSleepMode() and !!Target)
+	{
+		FRotator rot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
+
+		SetActorRotation(FQuat(rot));
+
+		FVector direction = Target->GetActorLocation() - GetActorLocation();
+
+		AddMovementInput(direction.GetSafeNormal());
+	}
 }
 
 void ACZombie_AI::UpdateLabelRenderScale()

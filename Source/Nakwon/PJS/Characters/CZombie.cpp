@@ -22,7 +22,7 @@ void ACZombie::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetCharacterMovement()->MaxWalkSpeed = 50;
+	GetCharacterMovement()->MaxWalkSpeed = 300;
 
 }
 
@@ -55,7 +55,18 @@ void ACZombie::SetAnimInst()
 
 void ACZombie::SetComponents()
 {
+<<<<<<< Updated upstream
 	RandSet = CreateDefaultSubobject<UCRandSetComponent>("RandSetComponent");
+=======
+	RandSet = CreateDefaultSubobject<UCRandSetComponent>("RandSet");
+
+	//State = CreateDefaultSubobject<UCStateComponent>("State");
+	//Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
+	//Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
 
 }
 

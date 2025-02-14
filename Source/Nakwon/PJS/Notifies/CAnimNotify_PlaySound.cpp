@@ -14,7 +14,9 @@ void UCAnimNotify_PlaySound::Notify(USkeletalMeshComponent* MeshComp, UAnimSeque
 	AActor* actor = MeshComp->GetOwner();
 
 	if (!!Sound)
-		UGameplayStatics::PlaySoundAtLocation(actor->GetWorld(), Sound, actor->GetActorLocation(), 3);
+	{
+		UGameplayStatics::PlaySoundAtLocation(actor->GetWorld(), Sound, actor->GetActorLocation(), SoundScale);
 
-	MeshComp->GetOwner()->MakeNoise(3, Cast<APawn>(actor), actor->GetActorLocation(), 100);
+		MeshComp->GetOwner()->MakeNoise(3, Cast<APawn>(actor), actor->GetActorLocation(), 100);
+	}
 }
