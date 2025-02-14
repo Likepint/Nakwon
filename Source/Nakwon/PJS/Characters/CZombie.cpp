@@ -4,8 +4,7 @@
 #include "PJS/Characters/CAnimInstance_Zombie.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PJS/Components/CRandSetComponent.h"
-#include "PJS/Components/CZMovementComponent.h"
-//#include "PJS/Components/CZMontageComponent.h"
+#include "LSJ/Components/CMovementComponent.h"
 
 ACZombie::ACZombie()
 {
