@@ -14,10 +14,25 @@ class NAKWON_API ACZombie
 {
 	GENERATED_BODY()
 
-private:
-	UPROPERTY(VisibleAnywhere, Category = "Component")
+protected:
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
 	class UCRandSetComponent* RandSet;
 
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
+=======
+=======
+>>>>>>> Stashed changes
+	//UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
+	//class UCStateComponent* State;
+
+	//UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
+	//class UCMovementComponent* Movement;
+
+	//UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
+	//class UCWeaponComponent* Weapon;
+
+>>>>>>> Stashed changes
 public:
 	ACZombie();
 

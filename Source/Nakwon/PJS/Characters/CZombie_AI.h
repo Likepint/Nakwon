@@ -9,6 +9,16 @@ class NAKWON_API ACZombie_AI : public ACZombie
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Component")
+	class UCStateComponent* State;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Component")
+	class UCZMovementComponent* Movement;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Component")
+	class UCWeaponComponent* Weapon;
+
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
@@ -19,20 +29,6 @@ private:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Label")
 	float LabelViewAmount = 3000.0f;
-
-//private:
-//	UPROPERTY(EditAnywhere, Category = "Patrol")
-//	class ACPatrolPath* PatrolPath;
-
-//#if WITH_EDITOR
-//private:
-//	UPROPERTY(VisibleDefaultsOnly)
-//	class UWidgetComponent* LabelWidget;
-//#endif
-
-//private:
-//	UPROPERTY(VisibleDefaultsOnly)
-//	class UCZWeaponComponent* Weapon;
 
 	UPROPERTY(VisibleDefaultsOnly)
 	class UCZAIBehaviorComponent* Behavior;
@@ -60,4 +56,7 @@ protected:
 
 public:
 	void End_Damaged() override;
+
+private:
+	class ACharacter* Target;
 };

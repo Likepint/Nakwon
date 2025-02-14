@@ -16,4 +16,7 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class USoundWave* Sound;
+
+	UPROPERTY(EditAnywhere)
+	float SoundScale = 1;
 };

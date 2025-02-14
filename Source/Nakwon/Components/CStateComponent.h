@@ -31,6 +31,7 @@ protected:
 	virtual void BeginPlay() override;
 
 public:
+	UFUNCTION(BlueprintCallable)
 	void SetIdleMode();
 	void SetEquipMode();
 	void SetSleepMode();
@@ -46,5 +47,6 @@ public:
 
 private:
 	EStateType Type;
-		
+	
+	bool bSleep = true;
 };
