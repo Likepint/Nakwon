@@ -4,7 +4,7 @@
 #include "CEquipment.h"
 #include "GameFramework/Character.h"
 #include "Components/CStateComponent.h"
-//#include "Components/CMovementComponent.h"
+#include "LSJ/Components/CMovementComponent.h"
 
 UCDoAction::UCDoAction()
 {
@@ -42,6 +42,6 @@ void UCDoAction::End_DoAction()
 
 	State->SetIdleMode();
 
-	//Movement->Move();
-	//Movement->DisableFixedCamera();
+	Movement->Move();
+	Movement->DisableFixedCamera();
 }

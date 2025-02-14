@@ -17,8 +17,6 @@ ACCharacter::ACCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-	// GetCharacterMovement()->MaxWalkSpeed
-
 	GetMesh()->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	GetMesh()->SetRelativeRotation(FQuat(FRotator(0.0f, -90.0f, 0.0f))); // quaternion
 
@@ -85,6 +83,8 @@ void ACCharacter::BeginPlay()
 	}
 
 	Movement->DisableControlRotation();
+
+	Movement->SetSpeed(ESpeed::PlayerWalk);
 }
 
 void ACCharacter::Tick(float DeltaTime)
@@ -107,5 +107,7 @@ void ACCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(IA_Bat, ETriggerEvent::Started, Weapon, &UCWeaponComponent::SetBatMode);
 
 		EnhancedInputComponent->BindAction(IA_Attack, ETriggerEvent::Started, Weapon, &UCWeaponComponent::DoAction);
+
+
 	}
 }

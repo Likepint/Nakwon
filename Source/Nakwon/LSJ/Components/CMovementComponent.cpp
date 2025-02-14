@@ -14,14 +14,11 @@ void UCMovementComponent::BeginPlay()
 	Super::BeginPlay();
 
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
-
-	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 100.0f;
 }
 
-void UCMovementComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UCMovementComponent::SetSpeed(ESpeed InType)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
+	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = Speed[(int32)InType];
 }
 
 void UCMovementComponent::OnMovement(const FInputActionValue& InVal)
@@ -46,12 +43,12 @@ void UCMovementComponent::OnLook(const FInputActionValue& InVal)
 
 void UCMovementComponent::OnRun(const FInputActionValue& InVal)
 {
-	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 400.0f;
 }
 
 void UCMovementComponent::OffRun(const FInputActionValue& InVal)
 {
-	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 100.0f;
+	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 250;
 }
 
 void UCMovementComponent::EnableControlRotation()

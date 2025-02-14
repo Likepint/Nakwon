@@ -4,24 +4,52 @@
 #include "Components/ActorComponent.h"
 #include "CMovementComponent.generated.h"
 
+UENUM()
+enum class ESpeed : uint8
+{
+	ZombieWalk = 0, ZombieRun, PlayerWalk, PlayerRun, MAX
+};
+
 UCLASS(ClassGroup = "Custom", meta = (BlueprintSpawnableComponent))
 class NAKWON_API UCMovementComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-public:	
-	UCMovementComponent();
+private:
+	UPROPERTY(EditAnywhere, Category = "CameraSpeed")
+	float HorizontalLook = 45;
+
+	UPROPERTY(EditAnywhere, Category = "CameraSpeed")
+	float VerticalLook = 45;
+
+private:
+	UPROPERTY(EditAnywhere, Category = "Speed")
+	float Speed[(int32)ESpeed::MAX] = { 200, 300, 250, 400 };
+
+public:
+	FORCEINLINE bool CanMove() { return bCanMove; }
+
+	FORCEINLINE float GetZombieWalkSpeed() { return Speed[(int32)ESpeed::ZombieWalk]; }
+	FORCEINLINE float GetZombieRunSpeed() { return Speed[(int32)ESpeed::ZombieRun]; }
+	FORCEINLINE float GetPlayerWalkSpeed() { return Speed[(int32)ESpeed::PlayerWalk]; }
+	FORCEINLINE float GetPlayerRunSpeed() { return Speed[(int32)ESpeed::PlayerRun]; }
 
 	FORCEINLINE bool GetFixedCamera() { return bFixedCamera; }
 	FORCEINLINE void EnableFixedCamera() { bFixedCamera = true; }
 	FORCEINLINE void DisableFixedCamera() { bFixedCamera = false; }
 
+	FORCEINLINE void EnableTopViewCamera() { bTopViewCamera = true; }
+	FORCEINLINE void DisableTopViewCamera() { bTopViewCamera = false; }
+
+public:	
+	UCMovementComponent();
+
 protected:
 	virtual void BeginPlay() override;
 
-public:	
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-		
+public:
+	void SetSpeed(ESpeed InType);
+
 public:
 	void OnMovement(const struct FInputActionValue& InVal);
 	void OnLook(const struct FInputActionValue& InVal);
