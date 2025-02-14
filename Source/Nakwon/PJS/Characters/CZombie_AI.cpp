@@ -1,7 +1,7 @@
 #include "PJS/Characters/CZombie_AI.h"
 #include "Global.h"
 #include "Components/CStateComponent.h"
-#include "PJS/Components/CZMovementComponent.h"
+#include "LSJ/Components/CMovementComponent.h"
 #include "Components/CWeaponComponent.h"
 #include "PJS/Components/CZAIBehaviorComponent.h"
 //#include "Components/WidgetComponent.h"
@@ -11,7 +11,7 @@
 ACZombie_AI::ACZombie_AI()
 {
 	State = CreateDefaultSubobject<UCStateComponent>("State");
-	Movement = CreateDefaultSubobject<UCZMovementComponent>("Movement");
+	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
 	Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
 
 	State->SetSleepMode();
@@ -61,7 +61,7 @@ void ACZombie_AI::Hitted()
 {
 	Super::Hitted();
 
-	//TrueCheck(State->IsDeadMode());
+	TrueCheck(State->IsDeadMode());
 
 	Behavior->SetDamagedMode();
 }

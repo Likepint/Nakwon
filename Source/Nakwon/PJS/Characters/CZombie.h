@@ -18,21 +18,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
 	class UCRandSetComponent* RandSet;
 
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> Stashed changes
-	//UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
-	//class UCStateComponent* State;
-
-	//UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
-	//class UCMovementComponent* Movement;
-
-	//UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
-	//class UCWeaponComponent* Weapon;
-
->>>>>>> Stashed changes
 public:
 	ACZombie();
 
@@ -41,8 +26,6 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
 	void Initialize();
@@ -53,10 +36,6 @@ private:
 
 public:
 	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
-
-//private:
-//	UFUNCTION()
-//	void OnStateTypeChanged(EZState InPrevType, EZState InNewType);
 
 protected:
 	virtual void Hitted();

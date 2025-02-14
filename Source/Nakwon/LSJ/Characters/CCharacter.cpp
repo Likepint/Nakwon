@@ -60,11 +60,11 @@ ACCharacter::ACCharacter()
 		IA_Attack = IA_ATTACK.Object;
 	}
 
-	// CMovementComponent로부터 컴포넌트 생성
-	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
-
 	// CStateComponent 생성
 	State = CreateDefaultSubobject<UCStateComponent>("State");
+
+	// CMovementComponent로부터 컴포넌트 생성
+	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
 
 	// CWeaponComponent로부터 컴포넌트 생성
 	Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
