@@ -13,14 +13,6 @@ void UCMovementComponent::BeginPlay()
 	Super::BeginPlay();
 
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
-<<<<<<< Updated upstream
-=======
-
-	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = Speed[(int32)ESpeed::Walk];
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 }
 
 void UCMovementComponent::SetSpeed(ESpeed InType)
@@ -50,28 +42,12 @@ void UCMovementComponent::OnLook(const FInputActionValue& InVal)
 
 void UCMovementComponent::OnRun(const FInputActionValue& InVal)
 {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 400.0f;
-=======
-	SetSpeed(ESpeed::Run);
->>>>>>> Stashed changes
-=======
-	SetSpeed(ESpeed::Run);
->>>>>>> Stashed changes
+	SetSpeed(ESpeed::PlayerRun);
 }
 
 void UCMovementComponent::OffRun(const FInputActionValue& InVal)
 {
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeed = 250;
-=======
-	SetSpeed(ESpeed::Walk);
->>>>>>> Stashed changes
-=======
-	SetSpeed(ESpeed::Walk);
->>>>>>> Stashed changes
+	SetSpeed(ESpeed::PlayerWalk);
 }
 
 void UCMovementComponent::EnableControlRotation()

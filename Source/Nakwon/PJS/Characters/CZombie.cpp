@@ -32,12 +32,6 @@ void ACZombie::Tick(float DeltaTime)
 
 }
 
-void ACZombie::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
-}
-
 void ACZombie::Initialize()
 {
 	GetMesh()->SetRelativeLocation(FVector(0, 0, -90));
@@ -55,18 +49,7 @@ void ACZombie::SetAnimInst()
 
 void ACZombie::SetComponents()
 {
-<<<<<<< Updated upstream
-	RandSet = CreateDefaultSubobject<UCRandSetComponent>("RandSetComponent");
-=======
 	RandSet = CreateDefaultSubobject<UCRandSetComponent>("RandSet");
-
-	//State = CreateDefaultSubobject<UCStateComponent>("State");
-	//Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
-	//Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 
 }
 

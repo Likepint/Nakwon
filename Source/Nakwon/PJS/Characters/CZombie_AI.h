@@ -14,7 +14,7 @@ protected:
 	class UCStateComponent* State;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Component")
-	class UCZMovementComponent* Movement;
+	class UCMovementComponent* Movement;
 
 	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = "Component")
 	class UCWeaponComponent* Weapon;
