@@ -1,4 +1,5 @@
 #include "LSJ/Components/CMovementComponent.h"
+#include "Global.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "InputActionValue.h"
@@ -22,6 +23,8 @@ void UCMovementComponent::SetSpeed(ESpeed InType)
 
 void UCMovementComponent::OnMovement(const FInputActionValue& InVal)
 {
+	FalseCheck(bCanMove);
+
 	FRotator rotator = FRotator(0, OwnerCharacter->GetControlRotation().Yaw, 0);
 	//rotator에는 전방방향 구하는 함수가 없어서 Quat으로 변경함
 

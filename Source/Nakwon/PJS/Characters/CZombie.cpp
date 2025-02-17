@@ -4,7 +4,11 @@
 #include "PJS/Characters/CAnimInstance_Zombie.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "PJS/Components/CRandSetComponent.h"
+#include "Components/CStateComponent.h"
 #include "LSJ/Components/CMovementComponent.h"
+#include "Components/CStatusComponent.h"
+#include "Components/CWeaponComponent.h"
+#include "Weapons/CWeaponStructures.h"
 
 ACZombie::ACZombie()
 {
@@ -24,6 +28,10 @@ void ACZombie::BeginPlay()
 
 	GetCharacterMovement()->MaxWalkSpeed = 300;
 
+	if (FMath::RandBool()) State->SetSleepMode();
+	else State->SetIdleMode();
+
+	State->OnStateTypeChanged.AddDynamic(this, &ACZombie::OnStateTypeChanged);
 }
 
 void ACZombie::Tick(float DeltaTime)
@@ -51,85 +59,80 @@ void ACZombie::SetComponents()
 {
 	RandSet = CreateDefaultSubobject<UCRandSetComponent>("RandSet");
 
+	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
+	CHelpers::CreateActorComponent<UCMovementComponent>(this, &Movement, "Movement");
+	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
+	CHelpers::CreateActorComponent<UCWeaponComponent>(this, &Weapon, "Weapon");
+
 }
 
 float ACZombie::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
 	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
-	//Damage.Power = damage;
-	//Damage.Character = Cast<ACharacter>(EventInstigator->GetPawn());
-	//Damage.Causer = DamageCauser;
-	//Damage.Event = (FZActionDamageEvent*)&DamageEvent;
+	Damage.Power = damage;
+	Damage.Character = Cast<ACharacter>(EventInstigator->GetPawn());
+	Damage.Causer = DamageCauser;
+	Damage.Event = (FActionDamageEvent*)&DamageEvent;
 
-	//State->SetHittedMode();
+	State->SetDamagedMode();
 
 	return damage;
 }
 
-//void ACZombie::OnStateTypeChanged(EZState InPrevType, EZState InNewType)
-//{
-//	/*switch (InNewType)
-//	{
-//		case EZState::dama: Hitted(); break;
-//		case EZState::Dead: Dead(); break;
-//	}*/
-//}
+void ACZombie::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
+{
+	switch (InNewType)
+	{
+		case EStateType::Damaged: Damaged(); break;
+		case EStateType::Dead: Dead(); break;
+	}
+}
 
-void ACZombie::Hitted()
+void ACZombie::Damaged()
 {
 	//Apply Damage
-	//{
-	//	Status->Damage(Damage.Power);
-	//	Damage.Power = 0;
-	//}
+	{
+		Status->Damage(Damage.Power);
+		Damage.Power = 0;
+	}
 
-	////Change Color
-	//{
-	//	Change_Color(this, FLinearColor::Red);
+	if (!!Damage.Event && !!Damage.Event->HitData)
+	{
+		FHitData* data = Damage.Event->HitData;
 
-	//	FTimerDelegate timerDelegate;
-	//	timerDelegate.BindUFunction(this, "RestoreColor");
+		data->PlayMontage(this);
+		data->PlayHitStop(GetWorld());
+		data->PlaySoundWave(this);
+		data->PlayEffect(GetWorld(), GetActorLocation(), GetActorRotation());
 
-	//	GetWorld()->GetTimerManager().SetTimer(RestoreColor_TimerHandle, timerDelegate, 0.2f, false);
-	//}	
+		if (Status->IsDead() == false)
+		{
+			FVector start = GetActorLocation();
+			FVector target = Damage.Character->GetActorLocation();
+			FVector direction = target - start;
+			direction.Normalize();
 
-	//if (!!Damage.Event && !!Damage.Event->HitData)
-	//{
-	//	FZHitData* data = Damage.Event->HitData;
+			LaunchCharacter(-direction * data->Launch, false, false);
+			SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+		}
+	}
 
-	//	data->PlayMontage(this);
-	//	data->PlayHitStop(GetWorld());
-	//	data->PlaySoundWave(this);
-	//	data->PlayEffect(GetWorld(), GetActorLocation(), GetActorRotation());
+	if (Status->IsDead())
+	{
+		State->SetDeadMode();
 
-	//	if (Status->IsDead() == false)
-	//	{
-	//		FVector start = GetActorLocation();
-	//		FVector target = Damage.Character->GetActorLocation();
-	//		FVector direction = target - start;
-	//		direction.Normalize();
+		return;
+	}
 
-	//		LaunchCharacter(-direction * data->Launch, false, false);
-	//		SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
-	//	}
-	//}
-
-	//if (Status->IsDead())
-	//{
-	//	State->SetDeadMode();
-
-	//	return;
-	//}
-
-	//Damage.Character = nullptr;
-	//Damage.Causer = nullptr;
-	//Damage.Event = nullptr;
+	Damage.Character = nullptr;
+	Damage.Causer = nullptr;
+	Damage.Event = nullptr;
 }
 
 void ACZombie::End_Damaged()
 {
-	//State->SetIdleMode();
+	State->SetIdleMode();
 }
 
 void ACZombie::Dead()
