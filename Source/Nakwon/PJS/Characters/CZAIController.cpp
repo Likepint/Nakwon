@@ -14,9 +14,9 @@ ACZAIController::ACZAIController()
 	Perception = CreateDefaultSubobject<UAIPerceptionComponent>("Perception");
 
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
-	Sight->SightRadius = 600;
-	Sight->LoseSightRadius = 800;
-	Sight->PeripheralVisionAngleDegrees = 45;
+	Sight->SightRadius = 300;
+	Sight->LoseSightRadius = 400;
+	Sight->PeripheralVisionAngleDegrees = 20;
 	Sight->SetMaxAge(2);
 
 	Sight->DetectionByAffiliation.bDetectEnemies = true;
