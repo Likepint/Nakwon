@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/CStateComponent.h"
 #include "PJS/Characters/IZombie.h"
 #include "GenericTeamAgentInterface.h"
 #include "CZombie.generated.h"
@@ -18,6 +19,18 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
 	class UCRandSetComponent* RandSet;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
+	class UCStateComponent* State;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
+	class UCMovementComponent* Movement;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
+	class UCStatusComponent* Status;
+
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
+	class UCWeaponComponent* Weapon;
+
 public:
 	ACZombie();
 
@@ -26,6 +39,10 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
+
+private:
+	UFUNCTION()
+	void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
 
 private:
 	void Initialize();
@@ -38,7 +55,7 @@ public:
 	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
-	virtual void Hitted();
+	virtual void Damaged();
 
 public:
 	virtual void End_Damaged() override;
@@ -49,9 +66,6 @@ private:
 public:
 	void End_Dead() override;
 
-//public:
-//	void End_Dead() override;
-
 private:
 	struct FDamageData
 	{
@@ -59,7 +73,7 @@ private:
 		class ACharacter* Character;
 		class AActor* Causer;
 
-		struct FZActionDamageEvent* Event;
+		struct FActionDamageEvent* Event;
 	} Damage;
 
 private:

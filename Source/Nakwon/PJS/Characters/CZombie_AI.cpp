@@ -10,12 +10,6 @@
 
 ACZombie_AI::ACZombie_AI()
 {
-	State = CreateDefaultSubobject<UCStateComponent>("State");
-	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
-	Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
-
-	State->SetSleepMode();
-
 	//CHelpers::CreateComponent<UWidgetComponent>(this, &LabelWidget, "Label", GetMesh());
 
 	//CHelpers::CreateActorComponent<UCWeaponComponent>(this, &Weapon, "Weapon");
@@ -40,16 +34,16 @@ void ACZombie_AI::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!State->IsSleepMode() and !!Target)
-	{
-		FRotator rot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
+	//if (!State->IsSleepMode() and !!Target)
+	//{
+	//	FRotator rot = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), Target->GetActorLocation());
 
-		SetActorRotation(FQuat(rot));
+	//	SetActorRotation(FQuat(rot));
 
-		FVector direction = Target->GetActorLocation() - GetActorLocation();
+	//	FVector direction = Target->GetActorLocation() - GetActorLocation();
 
-		AddMovementInput(direction.GetSafeNormal());
-	}
+	//	AddMovementInput(direction.GetSafeNormal());
+	//}
 }
 
 void ACZombie_AI::UpdateLabelRenderScale()
@@ -57,18 +51,18 @@ void ACZombie_AI::UpdateLabelRenderScale()
 
 }
 
-void ACZombie_AI::Hitted()
+void ACZombie_AI::Damaged()
 {
-	Super::Hitted();
+	Super::Damaged();
 
 	TrueCheck(State->IsDeadMode());
 
-	Behavior->SetDamagedMode();
+	//Behavior->SetDamagedMode();
 }
 
 void ACZombie_AI::End_Damaged()
 {
-	Super::Hitted();
+	Super::End_Damaged();
 
-	Behavior->SetWaitMode();
+	//Behavior->SetWaitMode();
 }
