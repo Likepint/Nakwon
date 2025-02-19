@@ -11,13 +11,19 @@ class NAKWON_API ACZAIController : public AAIController
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	class UAIPerceptionComponent* Perception;
+	class UAIPerceptionComponent* Perception_Hearing;
+
+	UPROPERTY(VisibleAnywhere)
+	class UAIPerceptionComponent* Perception_Sight;
 
 public:
 	ACZAIController();
 
 protected:
 	virtual void BeginPlay() override;
+
+public:
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 	void OnPossess(APawn* InPawn) override;
@@ -31,5 +37,9 @@ private:
 	class ACZombie_AI* Zombie;
 	class UCZAIBehaviorComponent* Behavior;
 
+	UPROPERTY(VisibleInstanceOnly)
+	class UAISenseConfig_Hearing* Hearing;
+
+	UPROPERTY(VisibleInstanceOnly)
 	class UAISenseConfig_Sight* Sight;
 };

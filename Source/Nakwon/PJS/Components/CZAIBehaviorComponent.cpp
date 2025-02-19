@@ -56,7 +56,7 @@ bool UCZAIBehaviorComponent::IsPatrolMode()
 
 bool UCZAIBehaviorComponent::IsDamagedMode()
 {
-	return GetType() == EAIStateType::Hitted;
+	return GetType() == EAIStateType::Damaged;
 }
 
 bool UCZAIBehaviorComponent::IsDeadMode()
@@ -86,7 +86,7 @@ void UCZAIBehaviorComponent::SetPatrolMode()
 
 void UCZAIBehaviorComponent::SetDamagedMode()
 {
-	ChangeType(EAIStateType::Hitted);
+	ChangeType(EAIStateType::Damaged);
 }
 
 void UCZAIBehaviorComponent::SetDeadMode()
