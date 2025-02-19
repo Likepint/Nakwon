@@ -7,7 +7,7 @@
 UENUM(BlueprintType)
 enum class EAIStateType : uint8
 {
-	Wait = 0, Approach, Action, Patrol, Hitted, Dead, MAX
+	Wait = 0, Approach, Action, Patrol, Damaged, Dead, MAX
 };
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAIStateTypeChanged, EAIStateType, InPrevType, EAIStateType, InNewType);
 
@@ -25,9 +25,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Key")
 	FName PatrolLocationKey = "Patrol_Location";
-
-	UPROPERTY(EditAnywhere, Category = "Key")
-	FName AvoidLocationKey = "Avoid_Location";
 
 private:
 	EAIStateType GetType();

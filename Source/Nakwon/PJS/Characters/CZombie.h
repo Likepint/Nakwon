@@ -11,7 +11,6 @@ UCLASS()
 class NAKWON_API ACZombie
 	: public ACharacter
 	, public IIZombie
-	, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -75,9 +74,6 @@ private:
 
 		struct FActionDamageEvent* Event;
 	} Damage;
-
-private:
-	FTimerHandle RestoreColor_TimerHandle;
 
 public:
 	TArray<TSubclassOf<class UCAnimInstance_Zombie>> GetAnimInstances() { return animInstances; }

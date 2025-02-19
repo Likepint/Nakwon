@@ -26,7 +26,8 @@ void ACZombie::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetCharacterMovement()->MaxWalkSpeed = 300;
+	if (FMath::RandBool()) GetCharacterMovement()->MaxWalkSpeed = 200;
+	else GetCharacterMovement()->MaxWalkSpeed = 300;
 
 	if (FMath::RandBool()) State->SetSleepMode();
 	else State->SetIdleMode();

@@ -3,6 +3,7 @@
 
 UCStateComponent::UCStateComponent()
 {
+	PrimaryComponentTick.bCanEverTick = true;
 
 }
 
@@ -10,6 +11,12 @@ void UCStateComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
+}
+
+void UCStateComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	if (!IsSleepMode())
+		bSleep = !bSleep;
 }
 
 void UCStateComponent::SetIdleMode()
@@ -24,6 +31,8 @@ void UCStateComponent::SetEquipMode()
 
 void UCStateComponent::SetSleepMode()
 {
+	bSleep = true;
+
 	ChangeType(EStateType::Sleep);
 }
 

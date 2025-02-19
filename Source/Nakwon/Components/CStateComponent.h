@@ -30,6 +30,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+public:	
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 public:
 	UFUNCTION(BlueprintCallable)
 	void SetIdleMode();
@@ -46,7 +49,8 @@ public:
 	FStateTypeChanged OnStateTypeChanged;
 
 private:
+	UPROPERTY(VisibleInstanceOnly)
 	EStateType Type;
 	
-	bool bSleep = true;
+	bool bSleep = false;
 };

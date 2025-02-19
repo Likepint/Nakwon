@@ -17,17 +17,12 @@ private:
 	uint8 TeamID = 2;
 
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Label")
-	float LabelViewAmount = 3000.0f;
-
 	UPROPERTY(VisibleDefaultsOnly)
 	class UCZAIBehaviorComponent* Behavior;
 
 public:
 	FORCEINLINE uint8 GetTeamID() { return TeamID; }
 	FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
-
-	//FORCEINLINE class ACPatrolPath* GetPatrolPath() { return PatrolPath; }
 
 public:
 	ACZombie_AI();
@@ -37,9 +32,6 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
-
-private:
-	void UpdateLabelRenderScale();
 
 protected:
 	void Damaged() override;
