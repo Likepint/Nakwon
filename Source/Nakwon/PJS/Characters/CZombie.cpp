@@ -26,11 +26,10 @@ void ACZombie::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (FMath::RandBool()) GetCharacterMovement()->MaxWalkSpeed = 200;
-	else GetCharacterMovement()->MaxWalkSpeed = 300;
+	GetCharacterMovement()->MaxWalkSpeed = 50;
 
-	if (FMath::RandBool()) State->SetSleepMode();
-	else State->SetIdleMode();
+	//if (FMath::RandBool()) State->SetSleepMode();
+	//else State->SetIdleMode();
 
 	State->OnStateTypeChanged.AddDynamic(this, &ACZombie::OnStateTypeChanged);
 }

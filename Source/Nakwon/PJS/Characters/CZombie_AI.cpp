@@ -16,7 +16,7 @@ void ACZombie_AI::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Target = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	Weapon->SetHandMode();
 }
 
 void ACZombie_AI::Tick(float DeltaTime)
@@ -31,12 +31,12 @@ void ACZombie_AI::Damaged()
 
 	TrueCheck(State->IsDeadMode());
 
-	//Behavior->SetDamagedMode();
+	Behavior->SetDamagedMode();
 }
 
 void ACZombie_AI::End_Damaged()
 {
 	Super::End_Damaged();
 
-	//Behavior->SetWaitMode();
+	Behavior->SetWaitMode();
 }

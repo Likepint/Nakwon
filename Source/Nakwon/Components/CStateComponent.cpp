@@ -1,5 +1,6 @@
 #include "Components/CStateComponent.h"
 #include "Global.h"
+#include "PJS/Characters/CZombie_AI.h"
 
 UCStateComponent::UCStateComponent()
 {
@@ -15,6 +16,8 @@ void UCStateComponent::BeginPlay()
 
 void UCStateComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
 	if (!IsSleepMode())
 		bSleep = !bSleep;
 }

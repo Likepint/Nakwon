@@ -2,12 +2,19 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GenericTeamAgentInterface.h"
 #include "CCharacter.generated.h"
 
 UCLASS()
-class NAKWON_API ACCharacter : public ACharacter
+class NAKWON_API ACCharacter
+	: public ACharacter
+	, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Team")
+		uint8 TeamID = 1;
 	
 private:
 	UPROPERTY(VisibleAnywhere)
@@ -57,5 +64,6 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-public:
+	FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(TeamID); }
+
 };
