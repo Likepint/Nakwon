@@ -55,6 +55,7 @@ public:
 	void SetBrickMode();
 
 	void DoAction();
+	void SetIsAiming(const bool& bAiming);
 
 private:
 	void SetMode(EWeaponType InType);

@@ -8,6 +8,9 @@ UCLASS()
 class NAKWON_API UCDoAction_Projectile : public UCDoAction
 {
 	GENERATED_BODY()
+
+public:
+	virtual void Tick(float InDeltaTime);
 	
 public:
 	FORCEINLINE void EnableProjectile() { bEnable = true; }
@@ -31,8 +34,4 @@ private:
 
 private:
 	TArray<class ACharacter*> Hitted;
-
-
-public:
-	void ProjectileShooting();
 };
