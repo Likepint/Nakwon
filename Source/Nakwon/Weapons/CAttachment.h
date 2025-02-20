@@ -65,4 +65,5 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category = "Game")
 	TArray<class UShapeComponent*> Collisions;
+
 };

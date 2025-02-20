@@ -17,24 +17,15 @@ public:
 	virtual void BeginPlay() override;
 
 public:
-	virtual void OnBeginEquip_Implementation() override;;
-	virtual void OnUnequip_Implementation() override;;
+	virtual void OnBeginEquip_Implementation() override;
+	virtual void OnUnequip_Implementation() override;
 
 
 public:
-	UPROPERTY(VisibleAnywhere, Category = Movement)
-	class UProjectileMovementComponent* MovementComp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+	class USphereComponent* TestSphere;
 
-	UPROPERTY(VisibleAnywhere, Category = Collision)
-	class USphereComponent* CollisionComp;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Projectile)
+	class UStaticMeshComponent* MeshSphere;
 
-	UPROPERTY(VisibleAnywhere, Category = Movement)
-	class UStaticMeshComponent* MeshComp;
-
-public:
-	void Shoot();
-
-public:
-	float InitialSpeed = 0.f;
-	FVector direction;
 };
