@@ -54,10 +54,10 @@ public:
 	void OnRun(const struct FInputActionValue& InVal);
 	void OffRun(const struct FInputActionValue& InVal);
 
-	void EnableControlRotation();
+	void EnableControlRotationd();
 
 	UFUNCTION(BlueprintCallable)
-	void DisableControlRotation();
+	void DisableControlRotationd();
 
 public:
 	UFUNCTION(BlueprintCallable)

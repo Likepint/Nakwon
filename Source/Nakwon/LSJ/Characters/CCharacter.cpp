@@ -8,8 +8,8 @@
 #include "InputAction.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "LSJ/Components/CMovementComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CStateComponent.h"
 #include "Components/CWeaponComponent.h"
 #include "Components/SphereComponent.h"
@@ -96,7 +96,7 @@ void ACCharacter::BeginPlay()
 		}
 	}
 
-	Movement->DisableControlRotation();
+	Movement->DisableControlRotationd();
 
 	Movement->SetSpeed(ESpeed::PlayerWalk);
 }
@@ -140,7 +140,7 @@ void ACCharacter::Draw()
 		Weapon->SetIsAiming(true);
 
 	Movement->Stop();
-	Movement->EnableControlRotation();
+	Movement->EnableControlRotationd();
 
 	FVector StartLocation = CSpawnPoint->GetComponentLocation();
 	FVector FromDir = GetActorLocation();
