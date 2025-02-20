@@ -53,17 +53,29 @@ void UCMovementComponent::OffRun(const FInputActionValue& InVal)
 	SetSpeed(ESpeed::PlayerWalk);
 }
 
-void UCMovementComponent::EnableControlRotation()
+void UCMovementComponent::EnableControlRotationd()
 {
 	OwnerCharacter->bUseControllerRotationYaw = true;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 }
 
-void UCMovementComponent::DisableControlRotation()
+void UCMovementComponent::DisableControlRotationd()
 {
 	OwnerCharacter->bUseControllerRotationYaw = false;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
 }
+
+//void UCMovementComponent::EnableControlRotation()
+//{
+//	OwnerCharacter->bUseControllerRotationYaw = true;
+//	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
+//}
+//
+//void UCMovementComponent::DisableControlRotation()
+//{
+//	OwnerCharacter->bUseControllerRotationYaw = false;
+//	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
+//}
 
 void UCMovementComponent::Move()
 {

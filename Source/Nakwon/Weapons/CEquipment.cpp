@@ -24,7 +24,7 @@ void UCEquipment::Equip_Implementation()
 		Movement->Stop();
 
 	if (Data.bUseControlRotation)
-		Movement->EnableControlRotation();
+		Movement->EnableControlRotationd();
 
 	if (!!Data.Montage)
 	{
@@ -57,7 +57,7 @@ void UCEquipment::End_Equip_Implementation()
 void UCEquipment::Unequip_Implementation()
 {
 	bEquipped = false;
-	Movement->DisableControlRotation();
+	Movement->DisableControlRotationd();
 
 	if (OnEquipmentUnequip.IsBound())
 		OnEquipmentUnequip.Broadcast();
