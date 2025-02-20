@@ -16,54 +16,40 @@ ACZAIController::ACZAIController()
 
 	Blackboard = CreateDefaultSubobject<UBlackboardComponent>("Blackboard");
 
-	// Perception_Hearing
-	Perception_Hearing = CreateDefaultSubobject<UAIPerceptionComponent>("Perception_Hearing");
+	Perception = CreateDefaultSubobject<UAIPerceptionComponent>("Perception");
 
-	Hearing = CreateDefaultSubobject<UAISenseConfig_Hearing>("Hearing");
-	Hearing->HearingRange = 800;
-	Hearing->bUseLoSHearing = true;
-	Hearing->LoSHearingRange = 1000;
-	Hearing	->SetMaxAge(2);
-
-	Hearing->DetectionByAffiliation.bDetectEnemies = true;
-	Hearing->DetectionByAffiliation.bDetectNeutrals = true;
-	Hearing->DetectionByAffiliation.bDetectFriendlies = true;
-
-	Perception_Hearing->ConfigureSense(*Hearing);
-	Perception_Hearing->SetDominantSense(*Hearing->GetSenseImplementation());
-
-	// Perception_Sight
-	Perception_Sight = CreateDefaultSubobject<UAIPerceptionComponent>("Perception_Sight");
-
+	// Sight
 	Sight = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight");
 	Sight->SightRadius = 300;
 	Sight->LoseSightRadius = 400;
-	Sight->PeripheralVisionAngleDegrees = 20;
+	Sight->PeripheralVisionAngleDegrees = 45;
 	Sight->SetMaxAge(2);
 
 	Sight->DetectionByAffiliation.bDetectEnemies = true;
-	Sight->DetectionByAffiliation.bDetectNeutrals = true;
-	Sight->DetectionByAffiliation.bDetectFriendlies = true;
+	Sight->DetectionByAffiliation.bDetectNeutrals = false;
+	Sight->DetectionByAffiliation.bDetectFriendlies = false;
 
-	Perception_Sight->ConfigureSense(*Sight);
-	Perception_Sight->SetDominantSense(*Sight->GetSenseImplementation());
+	Perception->ConfigureSense(*Sight);
+
+	// Hearing
+	Hearing = CreateDefaultSubobject<UAISenseConfig_Hearing>("Hearing");
+	Hearing->HearingRange = 800;
+	Hearing->SetMaxAge(2);
+
+	Hearing->DetectionByAffiliation.bDetectEnemies = true;
+	Hearing->DetectionByAffiliation.bDetectNeutrals = false;
+	Hearing->DetectionByAffiliation.bDetectFriendlies = false;
+
+	Perception->ConfigureSense(*Hearing);
+
+	Perception->SetDominantSense(*Sight->GetSenseImplementation());
 }
 
 void ACZAIController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Perception_Hearing->OnPerceptionUpdated.AddDynamic(this, &ACZAIController::OnPerceptionUpdated);
-	Perception_Sight->OnPerceptionUpdated.AddDynamic(this, &ACZAIController::OnPerceptionUpdated);
-}
-
-void ACZAIController::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-	if (CHelpers::GetComponent<UCStateComponent>(Zombie)->IsSleepMode())
-		Perception_Sight->SetActive(false);
-	else Perception_Sight->SetActive(true);
+	Perception->OnPerceptionUpdated.AddDynamic(this, &ACZAIController::OnPerceptionUpdated);
 }
 
 void ACZAIController::OnPossess(APawn* InPawn)
@@ -94,10 +80,7 @@ void ACZAIController::OnUnPossess()
 void ACZAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 {
 	TArray<AActor *> actors;
-	Perception_Hearing->GetCurrentlyPerceivedActors(Hearing->StaticClass(), actors);
-
-	if (Perception_Sight->IsActive())
-		Perception_Sight->GetCurrentlyPerceivedActors(Hearing->StaticClass(), actors);
+	Perception->GetCurrentlyPerceivedActors(Sight->StaticClass(), actors);
 
 	if (actors.Num() > 0)
 	{
@@ -107,25 +90,4 @@ void ACZAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 	}
 
 	Blackboard->SetValueAsObject("Target", nullptr);
-
-	//for (const auto& actor : actors)
-	//{
-	//	FActorPerceptionBlueprintInfo info;
-	//	Perception->GetActorsPerception(actor, info);
-
-	//	if(info.LastSensedStimuli[0]. )
-
-	//	GEngine->AddOnScreenDebugMessage(0, 1, FColor::Cyan, actor->GetName());
-	//}
-
-	//Blackboard->SetValueAsObject("Target", actors[0]);
-
-	//if (actors.Num() > 0)
-	//{
-	//	Blackboard->SetValueAsObject("Target", actors[0]);
-
-	//	return;
-	//}
-
-	//Blackboard->SetValueAsObject("Target", nullptr);
 }

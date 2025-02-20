@@ -17,12 +17,18 @@ private:
 	uint8 TeamID = 2;
 
 private:
+	UPROPERTY(EditAnywhere, Category = "Patrol")
+		class ACPatrolPath* PatrolPath;
+
+private:
 	UPROPERTY(VisibleDefaultsOnly)
 	class UCZAIBehaviorComponent* Behavior;
 
 public:
 	FORCEINLINE uint8 GetTeamID() { return TeamID; }
 	FORCEINLINE class UBehaviorTree* GetBehaviorTree() { return BehaviorTree; }
+
+	FORCEINLINE class ACPatrolPath* GetPatrolPath() { return PatrolPath; }
 
 public:
 	ACZombie_AI();
@@ -39,6 +45,4 @@ protected:
 public:
 	void End_Damaged() override;
 
-private:
-	class ACharacter* Target;
 };

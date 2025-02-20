@@ -30,6 +30,7 @@ private:
 	EAIStateType GetType();
 
 public:
+	bool IsSleepMode();
 	bool IsWaitMode();
 	bool IsApproachMode();
 	bool IsActionMode();
@@ -54,6 +55,7 @@ public:
 	void SetPatrolLocation(const FVector& InLocation);
 
 public:
+	void SetSleepMode();
 	void SetWaitMode();
 	void SetApproachMode();
 	void SetActionMode();

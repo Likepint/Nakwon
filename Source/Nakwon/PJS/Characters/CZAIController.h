@@ -11,19 +11,13 @@ class NAKWON_API ACZAIController : public AAIController
 
 private:
 	UPROPERTY(VisibleAnywhere)
-	class UAIPerceptionComponent* Perception_Hearing;
-
-	UPROPERTY(VisibleAnywhere)
-	class UAIPerceptionComponent* Perception_Sight;
+	class UAIPerceptionComponent* Perception;
 
 public:
 	ACZAIController();
 
 protected:
 	virtual void BeginPlay() override;
-
-public:
-	virtual void Tick(float DeltaTime) override;
 
 protected:
 	void OnPossess(APawn* InPawn) override;

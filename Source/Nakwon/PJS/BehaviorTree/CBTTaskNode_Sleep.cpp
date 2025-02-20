@@ -2,6 +2,7 @@
 #include "Global.h"
 #include "PJS/Characters/CZombie_AI.h"
 #include "PJS/Characters//CZAIController.h"
+#include "Components/CStateComponent.h"
 
 UCBTTaskNode_Sleep::UCBTTaskNode_Sleep()
 {

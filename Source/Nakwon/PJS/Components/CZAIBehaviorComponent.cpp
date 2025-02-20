@@ -34,6 +34,11 @@ EAIStateType UCZAIBehaviorComponent::GetType()
 	return (EAIStateType)Blackboard->GetValueAsEnum(AIStateTypeKey);
 }
 
+bool UCZAIBehaviorComponent::IsSleepMode()
+{
+	return false;
+}
+
 bool UCZAIBehaviorComponent::IsWaitMode()
 {
 	return GetType() == EAIStateType::Wait;
@@ -62,6 +67,11 @@ bool UCZAIBehaviorComponent::IsDamagedMode()
 bool UCZAIBehaviorComponent::IsDeadMode()
 {
 	return GetType() == EAIStateType::Dead;
+}
+
+void UCZAIBehaviorComponent::SetSleepMode()
+{
+	//ChangeType(EAIStateType::Sleep);
 }
 
 void UCZAIBehaviorComponent::SetWaitMode()

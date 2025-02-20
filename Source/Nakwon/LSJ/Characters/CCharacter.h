@@ -2,25 +2,29 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "GenericTeamAgentInterface.h"
 #include "CCharacter.generated.h"
 
 UCLASS()
-class NAKWON_API ACCharacter : public ACharacter
+class NAKWON_API ACCharacter
+	: public ACharacter
+	, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Team")
+		uint8 TeamID = 1;
 	
 private:
 	UPROPERTY(VisibleAnywhere)
 	class USpringArmComponent* SpringArm;
-public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+
+	UPROPERTY(VisibleAnywhere)
 	class UCameraComponent* Camera;
 
-	UPROPERTY(EditDefaultsOnly)
-	class USphereComponent* CSpawnPoint;
-
-public:
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, category="Component")
+private:
+	UPROPERTY(VisibleAnywhere, category="Component")
 	class UCMovementComponent* Movement;
 
 	UPROPERTY(VisibleAnywhere, category="Component")
@@ -28,10 +32,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, category = "Component")
 	class UCWeaponComponent* Weapon;
-
-private:
-	UPROPERTY(EditAnywhere, Category = "Projectile")
-	TSubclassOf<class ACAttachment_Projectile> Projectile;
 
 private:
 	UPROPERTY(VisibleAnywhere, category="Input")
@@ -52,10 +52,6 @@ private:
 	UPROPERTY(VisibleAnywhere, category="Input")
 	class UInputAction* IA_Attack;
 
-	UPROPERTY(VisibleAnywhere, category="Input")
-	class UInputAction* IA_Projectile;
-
-
 public:
 	ACCharacter();
 
@@ -68,18 +64,6 @@ public:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-public:
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	bool bThrow = false;
+	FGenericTeamId GetGenericTeamId() const override { return FGenericTeamId(TeamID); }
 
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-	bool bCanShoot = true;
-
-private:
-	void Draw();
-	void Shoot();
-
-	FTimerHandle coolTimer;
-
-	void CoolTime();
 };
