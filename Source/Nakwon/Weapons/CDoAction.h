@@ -25,7 +25,7 @@ public:
 		const TArray<FDoActionData>& InDoActionDatas,
 		const TArray<FHitData>& InHitDatas
 	);
-	virtual void Tick(float InDeltaTime) { }
+	virtual void Tick(float InDeltaTime);
 
 public:
 	virtual void DoAction();
@@ -63,7 +63,11 @@ protected:
 	class UCMovementComponent* Movement;
 	class UCStateComponent* State;
 
+
 	TArray<FDoActionData> DoActionDatas;
 	TArray<FHitData> HitDatas;
+
+public:
+	bool bAiming;
 
 };

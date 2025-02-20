@@ -6,62 +6,45 @@
 #include "Components/ActorComponent.h" 
 
 #include "GameFramework/ProjectileMovementComponent.h"
+#include <Kismet/KismetMathLibrary.h>
+#include "../LSJ/Characters/CCharacter.h"
 
 ACAttachment_Projectile::ACAttachment_Projectile()
 {
-    PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = true;
 
-    CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComp"));
-    CollisionComp->SetCollisionProfileName(FName("BlockAll"));
-    CollisionComp->SetSphereRadius(20.f);
-    SetRootComponent(CollisionComp);
+	TestSphere = CreateDefaultSubobject<USphereComponent>("TestSphere");
+	TestSphere->SetSphereRadius(32.f);
+	TestSphere->SetCollisionProfileName(FName("BlockAll"));
+	SetRootComponent(TestSphere);
 
-    MeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("MeshComp"));
-    MeshComp->SetupAttachment(RootComponent);
-    MeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-    MeshComp->SetRelativeScale3D(FVector(0.5));
+	MeshSphere = CreateDefaultSubobject<UStaticMeshComponent>("MeshSphere");
+	MeshSphere->SetRelativeScale3D(FVector(0.4f));
+	MeshSphere->SetupAttachment(TestSphere);
+	MeshSphere->SetCollisionProfileName(FName("BlockAllDynamic"));
 
-    MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComp"));
-    MovementComp->SetUpdatedComponent(CollisionComp);
-    MovementComp->InitialSpeed = 7000.f;
-    MovementComp->MaxSpeed = 7000.f;
-    MovementComp->bShouldBounce = true;
-    MovementComp->Bounciness = 0.3f;
-    
-    InitialLifeSpan = 0.3f;
+
 }
 
 void ACAttachment_Projectile::BeginPlay()
 {
-    Super::BeginPlay();
+	Super::BeginPlay();
 
-    CollisionComp->SetVisibility(false);
+	TestSphere->SetSimulatePhysics(true);
+	MeshSphere->SetSimulatePhysics(false);
 
-    AttachTo("Projectile");
-    
-    CollisionComp->SetVisibility(true);
-    MovementComp->Deactivate();
+	if (auto me = Cast<ACCharacter>(GetOwner()))
+	{
+
+	}
 }
 
-void ACAttachment_Projectile::OnBeginEquip_Implementation() 
+void ACAttachment_Projectile::OnBeginEquip_Implementation()
 {
-    AttachTo("Projectile");
+	AttachTo("Projectile");
 }
 
-void ACAttachment_Projectile::OnUnequip_Implementation() 
+void ACAttachment_Projectile::OnUnequip_Implementation()
 {
-    AttachTo("Projectile");
-}
-
-void ACAttachment_Projectile::Shoot()
-{
-    InitialSpeed = MovementComp->InitialSpeed;
-    direction = MovementComp->ConstrainDirectionToPlane(direction);
-    FVector velocity = InitialSpeed * direction;
-    
-    if (MovementComp)
-    {
-        MovementComp->Velocity = velocity;
-        MovementComp->SetActive(true, true);
-    }
+	AttachTo("Projectile");
 }

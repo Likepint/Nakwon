@@ -5,13 +5,19 @@
 #include "GameFramework/Character.h"
 #include "Components/CStateComponent.h"
 #include "LSJ/Components/CMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStaticsTypes.h"
+#include "CAttachment_Projectile.h"
+#include "Components/SphereComponent.h"
+#include "../LSJ/Characters/CCharacter.h"
 
 UCDoAction::UCDoAction()
 {
 
 }
 
-void UCDoAction::BeginPlay(ACAttachment * InAttachment, UCEquipment * InEquipment, ACharacter * InOwner, const TArray<FDoActionData>& InDoActionDatas, const TArray<FHitData>& InHitDatas)
+void UCDoAction::BeginPlay(ACAttachment* InAttachment, UCEquipment* InEquipment, ACharacter* InOwner, const TArray<FDoActionData>& InDoActionDatas, const TArray<FHitData>& InHitDatas)
 {
 	OwnerCharacter = InOwner;
 	World = OwnerCharacter->GetWorld();
@@ -21,7 +27,15 @@ void UCDoAction::BeginPlay(ACAttachment * InAttachment, UCEquipment * InEquipmen
 
 	DoActionDatas = InDoActionDatas;
 	HitDatas = InHitDatas;
+
+	bAiming = false;
 }
+
+void UCDoAction::Tick(float InDeltaTime)
+{
+
+}
+
 
 void UCDoAction::DoAction()
 {

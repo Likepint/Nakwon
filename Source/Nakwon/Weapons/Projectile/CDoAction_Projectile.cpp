@@ -2,6 +2,8 @@
 #include "Global.h"
 #include "GameFramework/Character.h"
 #include "Components/CStateComponent.h"
+#include "../CAttachment_Projectile.h"
+
 
 void UCDoAction_Projectile::DoAction()
 {
@@ -21,6 +23,12 @@ void UCDoAction_Projectile::DoAction()
 	DoActionDatas[Index].DoAction(OwnerCharacter);
 }
 
+void UCDoAction_Projectile::Tick(float InDeltaTime)
+{
+
+
+}
+
 void UCDoAction_Projectile::Begin_DoAction()
 {
 	Super::Begin_DoAction();
@@ -29,17 +37,6 @@ void UCDoAction_Projectile::Begin_DoAction()
 	bExist = false;
 	DoActionDatas[++Index].DoAction(OwnerCharacter);
 
-	ProjectileShooting();
-}
-
-void UCDoAction_Projectile::ProjectileShooting()
-{
-	/*FActorSpawnParameters spawnParams;
-	spawnParams.Owner = this;
-	spawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-	FTransform firePosition = GunMeshComp->GetSocketTransform(TEXT("FirePosition"));
-	GetWorld()->SpawnActor<ACAttachment_Projectile>(BulletFactory, firePosition, spawnParams);*/
 
 }
 
@@ -96,4 +93,3 @@ void UCDoAction_Projectile::OnAttachmentEndCollision()
 
 	}
 }
-

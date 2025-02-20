@@ -104,6 +104,12 @@ void UCWeaponComponent::DoAction()
 		GetDoAction()->DoAction();
 }
 
+void UCWeaponComponent::SetIsAiming(const bool& bAiming)
+{
+	if (!!GetDoAction())
+		GetDoAction()->bAiming = bAiming;
+}
+
 void UCWeaponComponent::SetMode(EWeaponType InType)
 {
 	if (Type == InType)
