@@ -55,12 +55,16 @@ void UCMovementComponent::OffRun(const FInputActionValue& InVal)
 
 void UCMovementComponent::EnableControlRotationd()
 {
+	NullCheck(OwnerCharacter);
+
 	OwnerCharacter->bUseControllerRotationYaw = true;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
 }
 
 void UCMovementComponent::DisableControlRotationd()
 {
+	NullCheck(OwnerCharacter);
+
 	OwnerCharacter->bUseControllerRotationYaw = false;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
 }

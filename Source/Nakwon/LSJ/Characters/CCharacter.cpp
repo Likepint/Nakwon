@@ -34,8 +34,8 @@ ACCharacter::ACCharacter()
 
 	CSpawnPoint = CreateDefaultSubobject<USphereComponent>(TEXT("CSpawnPoint"));
 	CSpawnPoint->SetupAttachment(Camera);
-	CSpawnPoint->SetRelativeLocation(FVector(274, 0, -2.5));
-	CSpawnPoint->SetRelativeRotation(FRotator(180, 0, 0));
+	CSpawnPoint->SetRelativeLocation(FVector(224, 30, 27));
+	CSpawnPoint->SetRelativeRotation(FRotator(0, 0, 0));
 
 	// 캐릭터 생성자에 IA랑 IMC 생성
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMC_DEFAULT(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/LSJ/Inputs/IMC_Default.IMC_Default'"));
@@ -147,13 +147,16 @@ void ACCharacter::Draw()
 	FVector ToDir = StartLocation;
 	FVector LaunchDirection = UKismetMathLibrary::GetDirectionUnitVector(FromDir, ToDir);
 
-	float Speed = 800.f;
+	FVector LeftOffset = GetActorRightVector() * -0.25f; 
+	LaunchDirection = (LaunchDirection + LeftOffset).GetSafeNormal();
+
+	float Speed = 700.f;
 	float Radius = 0.f;
 	float MaxSimTime = 2.0f;
 	float Frequency = 30.0f;
 
 	FPredictProjectilePathParams PathParams;
-
+	
 	PathParams.StartLocation = StartLocation;
 	PathParams.LaunchVelocity = LaunchDirection * Speed;
 	PathParams.bTraceWithCollision = true;
@@ -190,7 +193,10 @@ void ACCharacter::Shoot()
 	FVector ToDir = StartLocation;
 	FVector LaunchDirection = UKismetMathLibrary::GetDirectionUnitVector(FromDir, ToDir);
 
-	float Speed = 800.f;
+	FVector LeftOffset = GetActorRightVector() * -0.25f;
+	LaunchDirection = (LaunchDirection + LeftOffset).GetSafeNormal();
+
+	float Speed = 700.f;
 	float Radius = 5.0f;
 	float MaxSimTime = 2.0f;
 	float Frequency = 30.0f;
