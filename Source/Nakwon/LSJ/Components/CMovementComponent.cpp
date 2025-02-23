@@ -3,10 +3,15 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "InputActionValue.h"
+#include "LSJ/Characters/CCharacter.h"
 
 UCMovementComponent::UCMovementComponent()
 {
-
+	MaxStamina = 100.0f;
+	Stamina = MaxStamina;
+	StaminaDecreaseRate = 10.0f;
+	StaminaRecoveryRate = 5.0f;
+	bIsRunning = false;
 }
 
 void UCMovementComponent::BeginPlay()
@@ -14,6 +19,11 @@ void UCMovementComponent::BeginPlay()
 	Super::BeginPlay();
 
 	OwnerCharacter = Cast<ACharacter>(GetOwner());
+
+	bCrouched = false;
+
+	// 스태미나 관리용 타이머 시작
+	GetWorld()->GetTimerManager().SetTimer(StaminaTimerHandle, this, &UCMovementComponent::UpdateStamina, 0.1f, true);
 }
 
 void UCMovementComponent::SetSpeed(ESpeed InType)
@@ -45,13 +55,36 @@ void UCMovementComponent::OnLook(const FInputActionValue& InVal)
 
 void UCMovementComponent::OnRun(const FInputActionValue& InVal)
 {
-	SetSpeed(ESpeed::PlayerRun);
+	if (Stamina > 0.0f)
+	{
+		bIsRunning = true;
+		SetSpeed(ESpeed::PlayerRun);
+	}
 }
 
 void UCMovementComponent::OffRun(const FInputActionValue& InVal)
 {
+	bIsRunning = false;
 	SetSpeed(ESpeed::PlayerWalk);
 }
+
+void UCMovementComponent::OnCrouch(const FInputActionValue& InVal)
+{
+	auto player = Cast<ACCharacter>(OwnerCharacter);
+	NullCheck(OwnerCharacter);
+
+	if (player->bCrouched) {
+		OwnerCharacter->GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = false;
+		OwnerCharacter->UnCrouch();
+		player->bCrouched = false;
+	}
+	else {
+		OwnerCharacter->GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
+		OwnerCharacter->Crouch();
+		player->bCrouched = true;
+	}
+}
+
 
 void UCMovementComponent::EnableControlRotationd()
 {
@@ -68,19 +101,6 @@ void UCMovementComponent::DisableControlRotationd()
 	OwnerCharacter->bUseControllerRotationYaw = false;
 	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
 }
-
-//void UCMovementComponent::EnableControlRotation()
-//{
-//	OwnerCharacter->bUseControllerRotationYaw = true;
-//	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = false;
-//}
-//
-//void UCMovementComponent::DisableControlRotation()
-//{
-//	OwnerCharacter->bUseControllerRotationYaw = false;
-//	OwnerCharacter->GetCharacterMovement()->bOrientRotationToMovement = true;
-//}
-
 void UCMovementComponent::Move()
 {
 	bCanMove = true;
@@ -89,4 +109,24 @@ void UCMovementComponent::Move()
 void UCMovementComponent::Stop()
 {
 	bCanMove = false;
+}
+
+void UCMovementComponent::UpdateStamina()
+{
+	if (bIsRunning) 
+	{
+		Stamina -= 1.f;
+		Stamina = FMath::Clamp(Stamina, 0.f, 100.f);
+	}
+
+	if (Stamina == 0.f)
+	{
+		bIsRunning = false;
+	}
+}
+
+float UCMovementComponent::GetStamina() const
+{
+	return Stamina;
+
 }

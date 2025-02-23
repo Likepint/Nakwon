@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "../Characters/CCharacter.h"
+#include "Blueprint/UserWidget.h"
 #include "CMovementComponent.generated.h"
 
 UENUM()
@@ -47,12 +49,15 @@ protected:
 
 public:
 	void SetSpeed(ESpeed InType);
+
 public:
 	void OnMovement(const struct FInputActionValue& InVal);
 	void OnLook(const struct FInputActionValue& InVal);
 
 	void OnRun(const struct FInputActionValue& InVal);
 	void OffRun(const struct FInputActionValue& InVal);
+
+	void OnCrouch(const struct FInputActionValue& InVal);
 
 	void EnableControlRotationd();
 
@@ -64,6 +69,17 @@ public:
 	void Move();
 	void Stop();
 
+public:
+	UFUNCTION(BlueprintCallable, Category = "Stamina")
+	void UpdateStamina();
+	
+	UFUNCTION(BlueprintCallable, Category = "Stamina")
+	float GetStamina() const;
+	
+	UFUNCTION(BlueprintCallable, Category = "Stamina")
+	float GetMaxStamina() const { return MaxStamina; }
+
+
 private:
 	class ACharacter* OwnerCharacter;
 
@@ -71,4 +87,31 @@ private:
 	bool bCanMove = true;
 	bool bFixedCamera;
 	bool bTopViewCamera;
+	bool bCrouched;
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Stamina=100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxStamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float StaminaDecreaseRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float StaminaRecoveryRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsRunning;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> StaminaWidgetClass;
+
+	UPROPERTY()
+	UUserWidget* StaminaWidget;
+
+private:
+	FTimerHandle StaminaTimerHandle;
+
 };

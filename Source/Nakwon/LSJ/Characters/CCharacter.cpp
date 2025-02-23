@@ -15,6 +15,7 @@
 #include "Components/SphereComponent.h"
 #include "Weapons/CAttachment.h"
 #include "Weapons/CAttachment_Projectile.h"
+#include "PJS/Characters/CZombie.h"
 
 ACCharacter::ACCharacter()
 {
@@ -29,14 +30,17 @@ ACCharacter::ACCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
 	Camera->SetupAttachment(SpringArm);
+	Camera->SetRelativeLocation(FVector(90, 50, 0));
 
 	GetCharacterMovement()->RotationRate = FRotator(0, 720, 0);
 
 	CSpawnPoint = CreateDefaultSubobject<USphereComponent>(TEXT("CSpawnPoint"));
 	CSpawnPoint->SetupAttachment(Camera);
-	CSpawnPoint->SetRelativeLocation(FVector(224, 30, 27));
+	CSpawnPoint->SetRelativeLocation(FVector(180, -40, 30));
 	CSpawnPoint->SetRelativeRotation(FRotator(0, 0, 0));
-
+	//CSpawnPoint->SetCollisionProfileName(FName("CSpawnPoint"));
+	//CSpawnPoint->OnComponentBeginOverlap.AddDynamic(this, &ACCharacter::OnCSpawnOverlap);
+	
 	// 캐릭터 생성자에 IA랑 IMC 생성
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMC_DEFAULT(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/LSJ/Inputs/IMC_Default.IMC_Default'"));
 	if (IMC_DEFAULT.Succeeded()) {
@@ -73,6 +77,11 @@ ACCharacter::ACCharacter()
 		IA_Projectile = IA_PROJECTILE.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_CROUCH(TEXT("/Script/EnhancedInput.InputAction'/Game/LSJ/Inputs/IA_Crouch.IA_Crouch'"));
+	if (IA_CROUCH.Succeeded()) {
+		IA_Crouch = IA_CROUCH.Object;
+	}
+
 	// CStateComponent 생성
 	State = CreateDefaultSubobject<UCStateComponent>("State");
 
@@ -87,6 +96,17 @@ ACCharacter::ACCharacter()
 void ACCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// 스태미나 위젯 생성 및 추가
+	if (StaminaWidgetClass)
+	{
+		StaminaWidget = CreateWidget<UUserWidget>(GetWorld(), StaminaWidgetClass);
+		if (StaminaWidget)
+		{
+			StaminaWidget->AddToViewport();
+		}
+	}
+
 
 	if (APlayerController* PlayerController = Cast<APlayerController>(GetController()))
 	{
@@ -122,6 +142,8 @@ void ACCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 		EnhancedInputComponent->BindAction(IA_Attack, ETriggerEvent::Started, Weapon, &UCWeaponComponent::DoAction);
 
+		EnhancedInputComponent->BindAction(IA_Crouch, ETriggerEvent::Started, Movement, &UCMovementComponent::OnCrouch);
+
 		if (bCanShoot)
 		{
 			EnhancedInputComponent->BindAction(IA_Projectile, ETriggerEvent::Triggered, this, &ACCharacter::Draw);
@@ -147,11 +169,12 @@ void ACCharacter::Draw()
 	FVector ToDir = StartLocation;
 	FVector LaunchDirection = UKismetMathLibrary::GetDirectionUnitVector(FromDir, ToDir);
 
-	FVector LeftOffset = GetActorRightVector() * -0.25f; 
-	LaunchDirection = (LaunchDirection + LeftOffset).GetSafeNormal();
+	FVector ToLeft = GetActorRightVector() * -0.f;
+	LaunchDirection.Z *= 0.8f;
+	LaunchDirection = (LaunchDirection + ToLeft).GetSafeNormal();
 
 	float Speed = 700.f;
-	float Radius = 0.f;
+	float Radius = 5.f;
 	float MaxSimTime = 2.0f;
 	float Frequency = 30.0f;
 
@@ -165,6 +188,7 @@ void ACCharacter::Draw()
 	PathParams.SimFrequency = Frequency;
 	PathParams.DrawDebugType = EDrawDebugTrace::ForOneFrame;
 	PathParams.TraceChannel = ECC_Visibility;
+
 
 	FPredictProjectilePathResult PathResult;
 
@@ -193,8 +217,9 @@ void ACCharacter::Shoot()
 	FVector ToDir = StartLocation;
 	FVector LaunchDirection = UKismetMathLibrary::GetDirectionUnitVector(FromDir, ToDir);
 
-	FVector LeftOffset = GetActorRightVector() * -0.25f;
-	LaunchDirection = (LaunchDirection + LeftOffset).GetSafeNormal();
+	FVector ToLeft = GetActorRightVector() * -0.f;
+	LaunchDirection.Z *= 0.8f;
+	LaunchDirection = (LaunchDirection + ToLeft).GetSafeNormal();
 
 	float Speed = 700.f;
 	float Radius = 5.0f;
@@ -221,8 +246,7 @@ void ACCharacter::Shoot()
 
 		if (SpawnedProjectile)
 		{
-
-			UStaticMeshComponent* MeshComponent = Cast<UStaticMeshComponent>(SpawnedProjectile->GetComponentByClass(UStaticMeshComponent::StaticClass()));
+			USphereComponent* MeshComponent = Cast<USphereComponent>(SpawnedProjectile->GetComponentByClass(USphereComponent::StaticClass()));
 
 			if (MeshComponent) {
 
