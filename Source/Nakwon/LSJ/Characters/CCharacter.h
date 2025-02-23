@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GenericTeamAgentInterface.h"
+#include "Blueprint/UserWidget.h"
 #include "CCharacter.generated.h"
 
 UCLASS()
@@ -60,10 +61,12 @@ private:
 	UPROPERTY(VisibleAnywhere, category="Input")
     class UInputAction* IA_Projectile;
 
+	UPROPERTY(VisibleAnywhere, category="Input")
+    class UInputAction* IA_Crouch;
+
 private:
     UPROPERTY(EditAnywhere, Category = "Projectile")
     TSubclassOf<class ACAttachment_Projectile> Projectile;
-
 
 public:
 	ACCharacter();
@@ -86,6 +89,9 @@ public:
     UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
     bool bCanShoot = true;
 
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	bool bCrouched = false;
+
 private:
     void Draw();
     void Shoot();
@@ -93,4 +99,13 @@ private:
     FTimerHandle coolTimer;
 
     void CoolTime();
+
+public:
+	// 스태미나 위젯
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
+	TSubclassOf<UUserWidget> StaminaWidgetClass;
+
+	UPROPERTY()
+	UUserWidget* StaminaWidget;
+	
 };

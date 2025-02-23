@@ -13,7 +13,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Health")
 	float MaxHealth = 100;
 
-public:	
+public:
 	FORCEINLINE float GetMaxHealth() { return MaxHealth; }
 
 public:

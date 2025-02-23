@@ -10,7 +10,7 @@ public class Nakwon : ModuleRules
 
 		PublicIncludePaths.Add(ModuleDirectory);
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara", "UMG", "AIModule", "GameplayTasks", "NavigationSystem", "ProceduralMeshComponent" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "Niagara", "UMG", "AIModule", "GameplayTasks", "NavigationSystem", "ProceduralMeshComponent", "UMG"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
