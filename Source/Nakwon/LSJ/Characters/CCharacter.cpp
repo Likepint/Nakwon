@@ -16,6 +16,7 @@
 #include "Weapons/CAttachment.h"
 #include "Weapons/CAttachment_Projectile.h"
 #include "PJS/Characters/CZombie.h"
+#include "Animation/AnimMontage.h"
 
 ACCharacter::ACCharacter()
 {
@@ -82,6 +83,12 @@ ACCharacter::ACCharacter()
 		IA_Crouch = IA_CROUCH.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> IA_CHOKE(TEXT("/Script/EnhancedInput.InputAction'/Game/LSJ/Inputs/IA_Choke.IA_Choke'"));
+	if (IA_CHOKE.Succeeded()) {
+		IA_Choke = IA_CHOKE.Object;
+	}
+
+
 	// CStateComponent 생성
 	State = CreateDefaultSubobject<UCStateComponent>("State");
 
@@ -90,6 +97,13 @@ ACCharacter::ACCharacter()
 
 	// CWeaponComponent로부터 컴포넌트 생성
 	Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
+
+
+	ConstructorHelpers::FObjectFinder<UAnimMontage> ChokeAnim(TEXT("/Script/Engine.AnimMontage'/Game/LSJ/Animations/Choke.Choke'"));
+	if (ChokeAnim.Succeeded())
+	{
+		ChokeAnimationMontage = ChokeAnim.Object;
+	}
 
 }
 
@@ -143,6 +157,11 @@ void ACCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 		EnhancedInputComponent->BindAction(IA_Attack, ETriggerEvent::Started, Weapon, &UCWeaponComponent::DoAction);
 
 		EnhancedInputComponent->BindAction(IA_Crouch, ETriggerEvent::Started, Movement, &UCMovementComponent::OnCrouch);
+		
+		
+		EnhancedInputComponent->BindAction(IA_Choke, ETriggerEvent::Started, this, &ACCharacter::OnChoke);
+
+
 
 		if (bCanShoot)
 		{
@@ -268,4 +287,25 @@ void ACCharacter::Shoot()
 void ACCharacter::CoolTime()
 {
 	bCanShoot = true;
+}
+
+void ACCharacter::OnChoke(const FInputActionValue& InVal)
+{
+	if (GetMesh() && ChokeAnimationMontage)
+	{
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		if (AnimInstance && !AnimInstance->Montage_IsPlaying(ChokeAnimationMontage))
+		{
+			AnimInstance->Montage_Play(ChokeAnimationMontage);
+			GEngine->AddOnScreenDebugMessage(-1, 4.f, FColor::Red, TEXT("Choke!"));
+		}
+	}
+}
+
+void ACCharacter::OnZombieAttack(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	ACZombie* zombie = Cast<ACZombie>(OtherActor);
+	if (zombie) {
+
+	}
 }

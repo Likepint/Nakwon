@@ -85,7 +85,6 @@ void UCMovementComponent::OnCrouch(const FInputActionValue& InVal)
 	}
 }
 
-
 void UCMovementComponent::EnableControlRotationd()
 {
 	NullCheck(OwnerCharacter);
@@ -115,13 +114,14 @@ void UCMovementComponent::UpdateStamina()
 {
 	if (bIsRunning) 
 	{
-		Stamina -= 1.f;
+		Stamina -= 0.1f;
 		Stamina = FMath::Clamp(Stamina, 0.f, 100.f);
 	}
 
 	if (Stamina == 0.f)
 	{
 		bIsRunning = false;
+		SetSpeed(ESpeed::PlayerWalk);
 	}
 }
 

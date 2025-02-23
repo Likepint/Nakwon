@@ -64,6 +64,10 @@ private:
 	UPROPERTY(VisibleAnywhere, category="Input")
     class UInputAction* IA_Crouch;
 
+	UPROPERTY(VisibleAnywhere, category="Input")
+	class UInputAction* IA_Choke;
+
+
 private:
     UPROPERTY(EditAnywhere, Category = "Projectile")
     TSubclassOf<class ACAttachment_Projectile> Projectile;
@@ -101,11 +105,19 @@ private:
     void CoolTime();
 
 public:
-	// 스태미나 위젯
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> StaminaWidgetClass;
 
 	UPROPERTY()
 	UUserWidget* StaminaWidget;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Animation")
+    UAnimMontage* ChokeAnimationMontage;
+
+	void OnChoke(const struct FInputActionValue& InVal);
+
+
+private:
+	UFUNCTION()
+	void OnZombieAttack(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 };
