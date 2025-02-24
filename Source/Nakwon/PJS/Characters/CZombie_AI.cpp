@@ -10,6 +10,8 @@ ACZombie_AI::ACZombie_AI()
 	PrimaryActorTick.bCanEverTick = true;
 
 	CHelpers::CreateActorComponent<UCZAIBehaviorComponent>(this, &Behavior, "Behavior");
+
+	CHelpers::CreateActorComponent<UCWeaponComponent>(this, &Weapon, "Weapon");
 }
 
 void ACZombie_AI::BeginPlay()

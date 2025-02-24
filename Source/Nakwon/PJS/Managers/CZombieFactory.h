@@ -9,6 +9,10 @@ class NAKWON_API ACZombieFactory : public AActor
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(EditAnywhere, Category = "Count")
+	int32 ZombieCount = 0;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Component")
 	class USceneComponent* SceneComponent;

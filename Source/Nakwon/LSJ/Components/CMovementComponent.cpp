@@ -22,6 +22,8 @@ void UCMovementComponent::BeginPlay()
 
 	bCrouched = false;
 
+	OwnerCharacter->GetCharacterMovement()->MaxWalkSpeedCrouched = 150;
+
 	// 스태미나 관리용 타이머 시작
 	GetWorld()->GetTimerManager().SetTimer(StaminaTimerHandle, this, &UCMovementComponent::UpdateStamina, 0.1f, true);
 }
@@ -55,7 +57,7 @@ void UCMovementComponent::OnLook(const FInputActionValue& InVal)
 
 void UCMovementComponent::OnRun(const FInputActionValue& InVal)
 {
-	if (Stamina > 0.0f)
+	if (Stamina > 0.0f and !bCrouched)
 	{
 		bIsRunning = true;
 		SetSpeed(ESpeed::PlayerRun);
@@ -77,11 +79,13 @@ void UCMovementComponent::OnCrouch(const FInputActionValue& InVal)
 		OwnerCharacter->GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = false;
 		OwnerCharacter->UnCrouch();
 		player->bCrouched = false;
+		SetSpeed(ESpeed::PlayerWalk);
 	}
 	else {
 		OwnerCharacter->GetMovementComponent()->GetNavAgentPropertiesRef().bCanCrouch = true;
 		OwnerCharacter->Crouch();
 		player->bCrouched = true;
+		SetSpeed(ESpeed::PlayerCrouchWalk);
 	}
 }
 

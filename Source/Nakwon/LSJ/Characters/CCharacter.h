@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Components/CStateComponent.h"
+#include "PJS/Characters/IZombie.h"
 #include "GenericTeamAgentInterface.h"
 #include "Blueprint/UserWidget.h"
 #include "CCharacter.generated.h"
@@ -9,6 +11,7 @@
 UCLASS()
 class NAKWON_API ACCharacter
 	: public ACharacter
+	, public IIZombie
 	, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
@@ -35,6 +38,9 @@ public:
 
 	UPROPERTY(VisibleAnywhere, category="Component")
 	class UCStateComponent* State;
+
+	UPROPERTY(VisibleAnywhere, category="Component")
+	class UCStatusComponent* Status;
 
 	UPROPERTY(VisibleAnywhere, category = "Component")
 	class UCWeaponComponent* Weapon;
@@ -105,6 +111,35 @@ private:
     void CoolTime();
 
 public:
+	float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
+
+private:
+	struct FDamageData
+	{
+		float Power;
+		class ACharacter* Character;
+		class AActor* Causer;
+
+		struct FActionDamageEvent* Event;
+	} Damage;
+
+protected:
+	virtual void Damaged();
+
+public:
+	virtual void End_Damaged() override;
+
+private:
+	void Dead();
+
+public:
+	void End_Dead() override;
+
+	private:
+	UFUNCTION()
+	void OnStateTypeChanged(EStateType InPrevType, EStateType InNewType);
+
+public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> StaminaWidgetClass;
 
@@ -115,7 +150,6 @@ public:
     UAnimMontage* ChokeAnimationMontage;
 
 	void OnChoke(const struct FInputActionValue& InVal);
-
 
 private:
 	UFUNCTION()

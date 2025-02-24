@@ -48,5 +48,6 @@ void UCBTService_Zombie::TickNode(UBehaviorTreeComponent & OwnerComp, uint8 * No
 		return;
 	}
 
-	aiState->SetApproachMode();
+	if (!state->IsActionMode())
+		aiState->SetApproachMode();
 }

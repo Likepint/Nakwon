@@ -17,6 +17,8 @@
 #include "Weapons/CAttachment_Projectile.h"
 #include "PJS/Characters/CZombie.h"
 #include "Animation/AnimMontage.h"
+#include "Components/CStatusComponent.h"
+#include "Weapons/CWeaponStructures.h"
 
 ACCharacter::ACCharacter()
 {
@@ -95,6 +97,9 @@ ACCharacter::ACCharacter()
 	// CMovementComponent로부터 컴포넌트 생성
 	Movement = CreateDefaultSubobject<UCMovementComponent>("Movement");
 
+	// CStatus로부터 컴포넌트 생성
+	Status = CreateDefaultSubobject<UCStatusComponent>("Status");
+
 	// CWeaponComponent로부터 컴포넌트 생성
 	Weapon = CreateDefaultSubobject<UCWeaponComponent>("Weapon");
 
@@ -133,6 +138,8 @@ void ACCharacter::BeginPlay()
 	Movement->DisableControlRotationd();
 
 	Movement->SetSpeed(ESpeed::PlayerWalk);
+
+	State->OnStateTypeChanged.AddDynamic(this, &ACCharacter::OnStateTypeChanged);
 }
 
 void ACCharacter::Tick(float DeltaTime)
@@ -287,6 +294,87 @@ void ACCharacter::Shoot()
 void ACCharacter::CoolTime()
 {
 	bCanShoot = true;
+}
+
+float ACCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	float damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	Damage.Power = damage;
+	Damage.Character = Cast<ACharacter>(EventInstigator->GetPawn());
+	Damage.Causer = DamageCauser;
+	Damage.Event = (FActionDamageEvent*)&DamageEvent;
+
+	State->SetDamagedMode();
+
+	return damage;
+}
+
+void ACCharacter::Damaged()
+{
+	//Apply Damage
+	{
+		Status->Damage(Damage.Power);
+		Damage.Power = 0;
+	}
+
+	if (!!Damage.Event && !!Damage.Event->HitData)
+	{
+		FHitData* data = Damage.Event->HitData;
+
+		data->PlayMontage(this);
+		data->PlayHitStop(GetWorld());
+		data->PlaySoundWave(this);
+		data->PlayEffect(GetWorld(), GetActorLocation(), GetActorRotation());
+
+		if (Status->IsDead() == false)
+		{
+			FVector start = GetActorLocation();
+			FVector target = Damage.Character->GetActorLocation();
+			FVector direction = target - start;
+			direction.Normalize();
+
+			LaunchCharacter(-direction * data->Launch, false, false);
+			SetActorRotation(UKismetMathLibrary::FindLookAtRotation(start, target));
+		}
+	}
+
+	if (Status->IsDead())
+	{
+		State->SetDeadMode();
+
+		return;
+	}
+
+	Damage.Character = nullptr;
+	Damage.Causer = nullptr;
+	Damage.Event = nullptr;
+}
+
+void ACCharacter::End_Damaged()
+{
+	State->SetIdleMode();
+}
+
+void ACCharacter::Dead()
+{
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	//Montage->PlayDeadMode();
+}
+
+void ACCharacter::End_Dead()
+{
+
+}
+
+void ACCharacter::OnStateTypeChanged(EStateType InPrevType, EStateType InNewType)
+{
+	switch (InNewType)
+	{
+	case EStateType::Damaged: Damaged(); break;
+	case EStateType::Dead: Dead(); break;
+	}
 }
 
 void ACCharacter::OnChoke(const FInputActionValue& InVal)
