@@ -7,6 +7,7 @@
 #include "Components/CStateComponent.h"
 #include "LSJ/Components/CMovementComponent.h"
 #include "Components/CStatusComponent.h"
+#include "Components/CMontageComponent.h"
 #include "Components/CWeaponComponent.h"
 #include "Weapons/CWeaponStructures.h"
 
@@ -62,6 +63,7 @@ void ACZombie::SetComponents()
 	CHelpers::CreateActorComponent<UCStateComponent>(this, &State, "State");
 	CHelpers::CreateActorComponent<UCMovementComponent>(this, &Movement, "Movement");
 	CHelpers::CreateActorComponent<UCStatusComponent>(this, &Status, "Status");
+	CHelpers::CreateActorComponent<UCMontageComponent>(this, &Montage, "Montage");
 
 }
 
@@ -138,7 +140,7 @@ void ACZombie::Dead()
 {
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-	//Montage->PlayDeadMode();
+	Montage->PlayDeadMode();
 }
 
 void ACZombie::End_Dead()

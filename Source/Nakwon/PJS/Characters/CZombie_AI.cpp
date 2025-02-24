@@ -41,4 +41,7 @@ void ACZombie_AI::End_Damaged()
 	Super::End_Damaged();
 
 	Behavior->SetWaitMode();
+
+	if (State->IsDeadMode())
+		Behavior->SetActive(false);
 }
