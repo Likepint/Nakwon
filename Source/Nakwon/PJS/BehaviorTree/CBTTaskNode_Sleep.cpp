@@ -3,6 +3,8 @@
 #include "PJS/Characters/CZombie_AI.h"
 #include "PJS/Characters//CZAIController.h"
 #include "Components/CStateComponent.h"
+#include "BehaviorTree/BlackboardComponent.h"
+#include "PJS/Components/CZAIBehaviorComponent.h"
 
 UCBTTaskNode_Sleep::UCBTTaskNode_Sleep()
 {
@@ -30,8 +32,12 @@ void UCBTTaskNode_Sleep::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	ACZombie_AI* ai = Cast<ACZombie_AI>(controller->GetPawn());
 
 	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(ai);
-	if (state->IsSleepMode() == false)
+	UCZAIBehaviorComponent* behavior = CHelpers::GetComponent<UCZAIBehaviorComponent>(ai);
+
+	if (state->IsSleepMode() == false or behavior->GetTarget() != nullptr)
 	{
+		state->SetIdleMode();
+
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 
 		return;
