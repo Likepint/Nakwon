@@ -27,6 +27,9 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
 	class UCStatusComponent* Status;
 
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
+	class UCMontageComponent* Montage;
+
 
 public:
 	ACZombie();
