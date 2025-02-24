@@ -17,8 +17,8 @@ EBTNodeResult::Type UCBTTaskNode_Action::ExecuteTask(UBehaviorTreeComponent& Own
 {
 	Super::ExecuteTask(OwnerComp, NodeMemory);
 
-	ACZAIController* controller = Cast<ACZAIController>(OwnerComp.GetOwner());
-	ACZombie_AI* ai = Cast<ACZombie_AI>(controller->GetPawn());
+	controller = Cast<ACZAIController>(OwnerComp.GetOwner());
+	ai = Cast<ACZombie_AI>(controller->GetPawn());
 
 	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(ai);
 	NullCheckResult(weapon, EBTNodeResult::Failed);
@@ -33,21 +33,21 @@ void UCBTTaskNode_Action::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Nod
 {
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
-	ACZAIController* controller = Cast<ACZAIController>(OwnerComp.GetOwner());
-	ACZombie_AI* ai = Cast<ACZombie_AI>(controller->GetPawn());
-
-	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(ai);
-	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(ai);
-
-	bool bCheck = true;
-	bCheck &= (state->IsIdleMode());
-	bCheck &= (weapon->GetDoAction()->GetInAction() == false);
-
-	if (bCheck)
+	if (!!ai)
 	{
-		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+		UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(ai);
+		UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(ai);
 
-		return;
+		bool bCheck = true;
+		bCheck &= (state->IsIdleMode());
+		bCheck &= (weapon->GetDoAction()->GetInAction() == false);
+
+		if (bCheck)
+		{
+			FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
+
+			return;
+		}
 	}
 }
 
@@ -55,18 +55,20 @@ EBTNodeResult::Type UCBTTaskNode_Action::AbortTask(UBehaviorTreeComponent& Owner
 {
 	Super::AbortTask(OwnerComp, NodeMemory);
 
-	ACZAIController* controller = Cast<ACZAIController>(OwnerComp.GetOwner());
-	ACZombie_AI* ai = Cast<ACZombie_AI>(controller->GetPawn());
+	if (!!ai)
+	{
+		if (UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(ai))
+		{
+			bool bBeginAction = weapon->GetDoAction()->GetBeginAction();
+			if (bBeginAction == false)
+				weapon->GetDoAction()->Begin_DoAction();
 
-	UCWeaponComponent* weapon = CHelpers::GetComponent<UCWeaponComponent>(ai);
-	if (weapon == nullptr)
-		return EBTNodeResult::Failed;
+			weapon->GetDoAction()->End_DoAction();
 
-	bool bBeginAction = weapon->GetDoAction()->GetBeginAction();
-	if (bBeginAction == false)
-		weapon->GetDoAction()->Begin_DoAction();
+			return EBTNodeResult::Succeeded;
+		}
+		else return EBTNodeResult::Failed;
+	}
 
-	weapon->GetDoAction()->End_DoAction();
-
-	return EBTNodeResult::Succeeded;
+	return EBTNodeResult::Failed;
 }

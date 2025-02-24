@@ -54,6 +54,7 @@ public:
 	void SetWoodstickMode();
 	void SetBrickMode();
 
+	UFUNCTION(BlueprintCallable)
 	void DoAction();
 	void SetIsAiming(const bool& bAiming);
 

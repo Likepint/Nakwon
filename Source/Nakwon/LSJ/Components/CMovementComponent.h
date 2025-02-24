@@ -9,7 +9,7 @@
 UENUM()
 enum class ESpeed : uint8
 {
-	ZombieWalk = 0, ZombieRun, PlayerWalk, PlayerRun, MAX
+	ZombieWalk = 0, ZombieRun, PlayerCrouchWalk, PlayerWalk, PlayerRun, MAX
 };
 
 UCLASS(ClassGroup = "Custom", meta = (BlueprintSpawnableComponent))
@@ -26,13 +26,14 @@ private:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Speed")
-	float Speed[(int32)ESpeed::MAX] = { 50, 300, 250, 400 };
+	float Speed[(int32)ESpeed::MAX] = { 50, 300, 150, 250, 400 };
 
 public:
 	FORCEINLINE bool CanMove() { return bCanMove; }
 
 	FORCEINLINE float GetZombieWalkSpeed() { return Speed[(int32)ESpeed::ZombieWalk]; }
 	FORCEINLINE float GetZombieRunSpeed() { return Speed[(int32)ESpeed::ZombieRun]; }
+	FORCEINLINE float GetPlayerCrouchWalkSpeed() { return Speed[(int32)ESpeed::PlayerCrouchWalk]; }
 	FORCEINLINE float GetPlayerWalkSpeed() { return Speed[(int32)ESpeed::PlayerWalk]; }
 	FORCEINLINE float GetPlayerRunSpeed() { return Speed[(int32)ESpeed::PlayerRun]; }
 
