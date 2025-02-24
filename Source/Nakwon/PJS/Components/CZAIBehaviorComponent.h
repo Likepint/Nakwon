@@ -7,7 +7,7 @@
 UENUM(BlueprintType)
 enum class EAIStateType : uint8
 {
-	Wait = 0, Approach, Action, Patrol, Damaged, Dead, MAX
+	Sleep = 0, Wait, Approach, Action, Patrol, Damaged, Dead, MAX
 };
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FAIStateTypeChanged, EAIStateType, InPrevType, EAIStateType, InNewType);
 
@@ -16,7 +16,7 @@ class NAKWON_API UCZAIBehaviorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
-private:
+public:
 	UPROPERTY(EditAnywhere, Category = "Key")
 	FName AIStateTypeKey = "AIState";
 
