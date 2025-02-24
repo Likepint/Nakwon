@@ -30,6 +30,13 @@ void UCBTTaskNode_Damaged::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	ACZombie_AI* ai = Cast<ACZombie_AI>(controller->GetPawn());
 
 	UCStateComponent* state = CHelpers::GetComponent<UCStateComponent>(ai);
+
+	if (state->IsDeadMode())
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
+
 	if (state->IsDamagedMode() == false)
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
