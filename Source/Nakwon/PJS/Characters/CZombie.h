@@ -27,8 +27,6 @@ protected:
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
 	class UCStatusComponent* Status;
 
-	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
-	class UCWeaponComponent* Weapon;
 
 public:
 	ACZombie();

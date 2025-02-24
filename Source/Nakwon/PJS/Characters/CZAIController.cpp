@@ -80,7 +80,7 @@ void ACZAIController::OnUnPossess()
 void ACZAIController::OnPerceptionUpdated(const TArray<AActor*>& UpdatedActors)
 {
 	TArray<AActor *> actors;
-	Perception->GetCurrentlyPerceivedActors(Sight->StaticClass(), actors);
+	Perception->GetCurrentlyPerceivedActors(nullptr, actors);
 
 	if (actors.Num() > 0)
 	{

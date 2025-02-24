@@ -20,6 +20,10 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Patrol")
 		class ACPatrolPath* PatrolPath;
 
+public:
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere, Category = "Component")
+	class UCWeaponComponent* Weapon;
+
 private:
 	UPROPERTY(VisibleDefaultsOnly)
 	class UCZAIBehaviorComponent* Behavior;

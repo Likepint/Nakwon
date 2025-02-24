@@ -31,7 +31,7 @@ void ACZombieFactory::Tick(float DeltaTime)
 
 void ACZombieFactory::MakeZombie()
 {
-	for (int32 i = 0; i < 5; ++i)
+	for (int32 i = 0; i < ZombieCount; ++i)
 	{
 		FTransform transform;
 		transform.SetLocation(UKismetMathLibrary::RandomPointInBoundingBox(SpawnExtent->GetComponentLocation(), SpawnExtent->GetScaledBoxExtent()));
